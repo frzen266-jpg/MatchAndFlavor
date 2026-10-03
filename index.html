@@ -1,0 +1,2294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>Match&Flavor — Digital Dining & Cook-Off Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#eceee9;--surface:#fbfbf8;--surface2:#e2e7e1;--ink:#17262b;--muted:#586a6f;--line:#cfd8d3;
+  --accent:#1d5c68;--accent-2:#144651;--on-accent:#f4f8f7;--gold:#b8861f;
+  --green:#4d7f55;--red:#a8483b;--gray:#c9cdc6;--wood:#c3a272;--wood2:#a98655;
+  --shadow:0 1px 2px rgba(23,38,43,.08),0 10px 28px rgba(23,38,43,.07);
+  --serif:"PT Serif",Georgia,"Times New Roman",serif;--sans:"PT Sans","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#101a1d;--surface:#18262a;--surface2:#203136;--ink:#e6eeec;--muted:#93a8ab;--line:#2c4045;
+    --accent:#6fb5c2;--accent-2:#8ccad5;--on-accent:#0e1a1d;--gold:#d6a74a;
+    --green:#6fa877;--red:#cf7a6c;--gray:#55625f;--wood:#7a5d3c;--wood2:#654c30;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101a1d;--surface:#18262a;--surface2:#203136;--ink:#e6eeec;--muted:#93a8ab;--line:#2c4045;
+  --accent:#6fb5c2;--accent-2:#8ccad5;--on-accent:#0e1a1d;--gold:#d6a74a;
+  --green:#6fa877;--red:#cf7a6c;--gray:#55625f;--wood:#7a5d3c;--wood2:#654c30;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.3);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--sans);min-height:100vh}
+h1,h2,h3{font-family:var(--serif);margin:0;line-height:1.2}
+p{margin:0}
+button{font-family:inherit}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* header */
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.hdr::after{content:"";display:block;height:6px;background:
+  linear-gradient(135deg,var(--gold) 25%,transparent 25%) -6px 0/12px 6px,
+  linear-gradient(225deg,var(--gold) 25%,transparent 25%) -6px 0/12px 6px;opacity:.55}
+.hdr-in{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+.brand-mark{width:40px;height:40px;border-radius:12px;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:700 22px var(--serif)}
+.brand b{font:700 20px var(--serif);display:block;line-height:1.1}
+.brand small{color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:4px;background:var(--surface2);padding:4px;border-radius:14px}
+.tab{border:0;background:transparent;color:var(--muted);font:700 15px var(--sans);padding:9px 14px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:40px}
+.tab[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.badge{min-width:20px;height:20px;border-radius:10px;background:var(--red);color:#fff;font:700 12px/20px var(--sans);text-align:center;padding:0 6px}
+.hdr-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.langs{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.langs button{border:0;background:transparent;color:var(--muted);font:700 14px var(--sans);padding:9px 12px;cursor:pointer;min-height:40px}
+.langs button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.ptschip{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 12px;font-weight:700;display:flex;gap:6px;align-items:center;min-height:40px}
+.ptschip i{font-style:normal;color:var(--gold)}
+
+/* seat bar */
+.seatbar{max-width:1180px;margin:14px auto 0;padding:0 16px}
+.seatbar-in{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;box-shadow:var(--shadow)}
+.seat-info{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-right:auto;min-width:200px}
+.seat-info p{color:var(--muted)}
+.seat-info .warn{color:var(--red);font-size:14px;flex-basis:100%}
+.dotwalk{width:12px;height:12px;border-radius:50%;background:var(--gray);flex:none}
+.seat-ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.seg{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--ink);font:700 14px var(--sans);padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:40px}
+.seg button[aria-pressed="true"]{background:var(--surface2)}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block;flex:none}
+.dot.open{background:var(--green)}.dot.private{background:var(--red)}.dot.empty{background:var(--gray)}
+.switch{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:8px 12px 8px 10px;font:700 14px var(--sans);cursor:pointer;display:flex;align-items:center;gap:10px;min-height:40px}
+.switch .trk{width:34px;height:20px;border-radius:10px;background:var(--gray);position:relative;transition:background .15s;flex:none}
+.switch .trk::after{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .15s}
+.switch[aria-checked="true"] .trk{background:var(--accent)}
+.switch[aria-checked="true"] .trk::after{transform:translateX(14px)}
+.dndnote{max-width:1180px;margin:8px auto 0;padding:0 16px;color:var(--muted);font-size:14px}
+
+/* buttons */
+.btn{font:700 15px/1 var(--sans);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px 14px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;transition:background .15s,border-color .15s,transform .08s}
+.btn:hover{border-color:var(--muted)}.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn-primary:hover{background:var(--accent-2);border-color:var(--accent-2)}
+.btn-green{background:var(--green);border-color:var(--green);color:#fff}
+.btn-quiet{background:transparent}
+.btn-lg{padding:14px 24px;font-size:17px;min-height:52px}
+.btn[disabled],.btn[aria-disabled="true"]{opacity:.5;cursor:not-allowed}
+.btn-sm{padding:8px 11px;min-height:36px;font-size:14px}
+
+/* layout */
+.main{max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+.view-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-end;margin-bottom:14px}
+.view-head h1{font-size:28px}
+.sub{color:var(--muted);margin-top:4px}
+.legend{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px}
+.legend li{display:flex;align-items:center;gap:8px}
+.sw{width:14px;height:14px;border-radius:50%;display:inline-block}
+.sw.empty{background:var(--gray)}.sw.open{background:var(--green)}.sw.private{background:var(--red)}
+.sw.you{border:2px solid var(--accent);background:transparent}
+
+/* floor */
+.room{position:relative;border:1px solid var(--line);border-radius:22px;padding:34px 14px 38px;background:
+  repeating-linear-gradient(45deg,transparent 0 22px,rgba(184,134,31,.07) 22px 23px),
+  repeating-linear-gradient(-45deg,transparent 0 22px,rgba(184,134,31,.07) 22px 23px),var(--surface);box-shadow:var(--shadow)}
+.room-label{position:absolute;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:3px 16px;font-size:13px;color:var(--muted)}
+.room-label.top{top:-1px;border-top:0;border-radius:0 0 10px 10px}
+.room-label.bottom{bottom:-1px;border-bottom:0;border-radius:10px 10px 0 0}
+.floor{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 6px}
+.tbl{background:none;border:0;padding:6px 0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--ink);border-radius:20px}
+.tbl .stage{position:relative;width:132px;height:132px;display:block}
+.disc{position:absolute;left:31px;top:31px;width:70px;height:70px;border-radius:50%;display:grid;place-items:center;font:700 23px/1 var(--serif);box-shadow:inset 0 -5px 0 rgba(0,0,0,.14),0 3px 8px rgba(23,38,43,.2);transition:transform .15s}
+.tbl:hover .disc{transform:scale(1.07)}
+.disc.empty{background:var(--gray);color:var(--ink)}
+.disc.open{background:var(--green);color:#fff}
+.disc.private{background:var(--red);color:#fff}
+.seat{position:absolute;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:17px;line-height:1;background:var(--surface);border:2px solid var(--line)}
+.seat.off{border-style:dashed;background:transparent;opacity:.65}
+.seat.s0{left:51px;top:0}.seat.s1{right:0;top:51px}.seat.s2{left:51px;bottom:0}.seat.s3{left:0;top:51px}
+.st-open .seat.on{border-color:var(--green)}.st-private .seat.on{border-color:var(--red)}
+.seat.me{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29,92,104,.25)}
+.tbl.mine .stage::after{content:"";position:absolute;inset:2px;border:2px solid var(--accent);border-radius:30px;pointer-events:none}
+.youtag{position:absolute;right:-2px;bottom:-2px;background:var(--accent);color:var(--on-accent);font:700 12px var(--sans);padding:2px 8px;border-radius:9px;z-index:1}
+.cap{font-size:13px;color:var(--muted)}
+
+/* menu */
+.menu-layout{display:grid;gap:20px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:999px;font:700 14px var(--sans);cursor:pointer;min-height:38px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.dishes{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.dish{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.dish-art{height:96px;display:grid;place-items:center;font-size:52px;background:var(--surface2)}
+.dish-body{padding:12px 14px 6px;flex:1}
+.dish-body h3{font-size:18px;margin-bottom:4px}
+.dish-body p{color:var(--muted);font-size:14px}
+.dish-foot{padding:10px 14px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.price{font:700 17px var(--serif);white-space:nowrap}
+.stepper{display:flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:12px;padding:2px}
+.stepper button{width:36px;height:36px;border:0;background:var(--surface2);border-radius:9px;font:700 18px var(--sans);color:var(--ink);cursor:pointer}
+.stepper span{min-width:26px;text-align:center;font-weight:700}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+.panel h2{font-size:21px;margin-bottom:10px}
+.cartline{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.cartline .nm{flex:1;min-width:0}
+.cartline .nm small{display:block;color:var(--muted)}
+.rows{margin:12px 0}
+.row{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.row.tot{font:700 19px var(--serif);border-top:1px solid var(--line);margin-top:6px;padding-top:10px}
+.check{display:flex;gap:10px;align-items:flex-start;margin:10px 0;font-size:14px;cursor:pointer}
+.check input{width:20px;height:20px;margin:0;accent-color:var(--accent);flex:none}
+.hint{color:var(--muted);font-size:14px}
+.empty{color:var(--muted);padding:12px 0}
+.ordl{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:6px;font-size:14px}
+.ordl li{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.tag{display:inline-block;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700;background:var(--surface2)}
+.tag.ok{background:rgba(77,127,85,.18);color:var(--green)}.tag.warn{background:rgba(184,134,31,.2);color:var(--gold)}.tag.bad{background:rgba(168,72,59,.15);color:var(--red)}
+
+/* inbox */
+.msgs{display:grid;gap:12px;max-width:760px}
+.msg{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;display:grid;grid-template-columns:48px 1fr;gap:4px 12px;box-shadow:var(--shadow)}
+.msg.unread{border-color:var(--accent)}
+.avatar{width:48px;height:48px;border-radius:50%;background:var(--surface2);display:grid;place-items:center;font-size:27px;grid-row:span 3}
+.msg-top{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.msg-top b{font-size:16px}
+.msg-top small{color:var(--muted)}
+.msg-txt{font-size:16px}
+.msg-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.paceRow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* modal */
+.backdrop{position:fixed;inset:0;z-index:40;background:rgba(10,20,23,.55);display:grid;place-items:center;padding:16px;overflow:auto}
+.dlg{background:var(--surface);color:var(--ink);border-radius:22px;width:100%;max-width:460px;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.35);border:1px solid var(--line);max-height:calc(100vh - 32px);overflow:auto}
+.dlg h2{font-size:23px;margin-bottom:8px}
+.dlg .acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
+.glist{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
+.guest{display:grid;grid-template-columns:44px 1fr;gap:4px 12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px}
+.guest .avatar{width:44px;height:44px;font-size:24px;grid-row:span 2}
+.guest .btn{grid-column:2;justify-self:start;margin-top:4px}
+.guest small{color:var(--muted)}
+.guest .gacts{grid-column:2;display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.guest .gacts .btn{margin:0}
+.sitbanner{background:rgba(184,134,31,.16);border:1px solid var(--gold);border-radius:14px;padding:10px 14px;margin:0 0 14px;font-weight:700}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700}
+.pay-head{margin:-20px -20px 14px;padding:16px 20px;background:#b8392e;color:#fff;border-radius:22px 22px 0 0;display:flex;gap:12px;align-items:center}
+.pay-head b{font:700 20px var(--serif);display:block}
+.pay-head small{opacity:.85}
+.pay-logo{width:42px;height:42px;border-radius:12px;background:#fff;color:#b8392e;display:grid;place-items:center;font:700 16px var(--sans)}
+.qr-wrap{position:relative;width:208px;margin:14px auto 8px;padding:10px;background:#fff;border-radius:16px;border:1px solid var(--line)}
+.qr{display:block;width:100%;height:auto}
+.qr-wrap.exp .qr{filter:blur(5px) grayscale(1);opacity:.5}
+.qr-over{position:absolute;inset:0;display:grid;place-items:center;font:700 16px var(--serif);color:#17262b;text-align:center;padding:10px}
+.center{text-align:center}
+.spin{width:42px;height:42px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--accent);margin:18px auto;animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.okmark{width:56px;height:56px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:30px;margin:14px auto}
+
+/* toasts */
+.toasts{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:80;display:grid;gap:8px;max-width:min(380px,calc(100vw - 24px));pointer-events:none}
+.toast{background:var(--ink);color:var(--bg);padding:12px 14px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.3);font-size:15px;animation:tin .25s ease-out;pointer-events:auto}
+.toast.out{opacity:0;transform:translateY(8px);transition:all .3s}
+@keyframes tin{from{opacity:0;transform:translateY(10px)}}
+
+/* game */
+.game{position:fixed;inset:0;z-index:60;background:var(--bg);overflow:auto;display:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.game.open{display:block}
+.g-wrap{max-width:780px;margin:0 auto;padding:14px 16px 40px}
+.g-head{display:flex;gap:12px 18px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.g-title{margin-right:auto}
+.g-title small{color:var(--muted);font-size:14px;display:block}
+.g-title h2{font-size:24px}
+.g-steps{list-style:none;display:flex;gap:6px;margin:0;padding:0}
+.g-steps li{width:30px;height:8px;border-radius:4px;background:var(--line)}
+.g-steps li.done{background:var(--green)}.g-steps li.cur{background:var(--accent)}
+.g-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:var(--shadow)}
+.g-card.center{text-align:center;display:grid;gap:12px;justify-items:center;padding:30px 20px}
+.g-emoji{font-size:60px;line-height:1}
+.g-desc{max-width:520px;color:var(--muted);font-size:17px}
+.score{font:700 64px/1 var(--serif)}
+.rating{font:700 22px var(--serif);color:var(--accent)}
+.hud{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 16px;margin-bottom:10px;font-size:16px}
+.lbl{color:var(--muted)}
+.stage-svg{width:100%;max-width:440px;height:auto;display:block;margin:0 auto;border-radius:18px;user-select:none;-webkit-user-select:none;touch-action:none}
+.bar{height:12px;border-radius:6px;background:var(--surface2);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:var(--accent);width:0}
+.meter{display:flex;gap:10px;align-items:center;margin-top:12px}
+.meter .bar{flex:1}
+.gauge{position:relative;height:24px;border-radius:12px;background:var(--surface2);border:1px solid var(--line);overflow:hidden;margin-top:12px}
+.gauge .zone{position:absolute;top:0;bottom:0;background:var(--green);opacity:.55}
+.gauge .needle{position:absolute;top:-2px;bottom:-2px;width:5px;margin-left:-2px;background:var(--ink);border-radius:3px}
+.gmeta{display:flex;justify-content:space-between;margin-top:6px;font-size:15px}
+.actrow{display:flex;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.asm{display:grid;gap:16px}
+.tiles{display:grid;gap:8px}
+.tile{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px 12px;border-radius:14px;font:700 16px var(--sans);cursor:pointer;text-align:left;min-height:48px}
+.tile:disabled{opacity:.45;cursor:not-allowed}
+.tile .sg{width:20px;height:20px;border-radius:50%;flex:none;border:2px solid rgba(0,0,0,.15)}
+.tile .ord{margin-left:auto;background:var(--accent);color:var(--on-accent);border-radius:999px;min-width:24px;height:24px;display:grid;place-items:center;font-size:13px}
+.shake{animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.flip{transform-box:fill-box;transform-origin:center;animation:flipk .45s ease-in-out}
+@keyframes flipk{50%{transform:scaleY(.08)}}
+.flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick .5s ease-in-out infinite alternate}
+.flame.f2{animation-duration:.37s}.flame.f3{animation-duration:.61s}
+@keyframes flick{from{transform:scaleY(.82) scaleX(1.05)}to{transform:scaleY(1.12) scaleX(.94)}}
+.sumrows{display:grid;gap:8px;width:100%;max-width:460px;text-align:left}
+.sumrow{display:grid;grid-template-columns:120px 1fr 48px;gap:10px;align-items:center;font-size:15px}
+.sumrow b{text-align:right}
+.quit{position:fixed;inset:0;z-index:70;background:rgba(10,20,23,.6);display:grid;place-items:center;padding:16px}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
+
+/* ===== mobile-only layout ===== */
+html,body{overscroll-behavior-y:none}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+body{max-width:480px;margin:0 auto;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px));box-shadow:0 0 0 1px var(--line);overflow-x:hidden}
+.hdr-in{padding:8px 12px;gap:6px 10px}
+.brand small{display:none}
+.brand-mark{width:36px;height:36px}
+.hdr-r{margin-left:auto;flex-wrap:nowrap}
+.tabs{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(480px,100%);z-index:30;border-radius:0;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line);gap:4px;box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+.tab{flex:1;justify-content:center;min-height:50px;font-size:14px;padding:6px 4px;text-align:center}
+.seatbar{padding:0 12px;margin-top:10px}
+.seat-info{min-width:0}
+.seg button,.switch{font-size:13px}
+.main{padding:12px 12px 24px}
+.view-head h1{font-size:23px}
+.legend{font-size:13px;gap:6px 12px}
+.room{padding:30px 6px 34px;border-radius:18px}
+.floor{grid-template-columns:repeat(2,1fr)}
+.dishes{grid-template-columns:repeat(2,1fr);gap:10px}
+.dish-art{height:70px;font-size:40px}
+.dish-body{padding:10px 10px 4px}
+.dish-body h3{font-size:16px}
+.dish-body p{font-size:13px}
+.dish-foot{padding:8px 10px 12px;flex-wrap:wrap}
+.menu-layout{gap:16px}
+.panel.sticky{position:static}
+.chips{flex-wrap:nowrap;overflow-x:auto;margin-right:-12px;padding-right:12px;scrollbar-width:none}
+.chip{flex:none}
+.toasts{left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));bottom:auto;max-width:none}
+.game{left:50%;right:auto;width:min(480px,100%);transform:translateX(-50%)}
+.g-wrap{max-width:480px;padding:12px 12px 40px}
+.sumrow{grid-template-columns:92px 1fr 44px}
+.dlg{max-width:440px}
+.cartbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(70px + env(safe-area-inset-bottom,0px));width:min(456px,calc(100% - 24px));z-index:25;background:var(--accent);color:var(--on-accent);border:0;border-radius:16px;padding:14px;font:700 16px var(--sans);box-shadow:var(--shadow);min-height:50px}
+/* new mini-games */
+.stackbox{display:flex;flex-direction:column-reverse;align-items:center;gap:2px;min-height:84px;background:var(--surface2);border-radius:14px;padding:8px;margin:6px 0 12px;font-size:26px}
+.stackbox small{font-size:13px;color:var(--muted)}
+.memgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.mcard{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:10px 4px;font:400 30px var(--sans);color:var(--ink);min-height:86px}
+.mcard small{font:700 13px var(--sans)}
+.mcard.pick[aria-pressed="true"]{border-color:var(--accent);background:var(--surface2)}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px}
+.pcard{aspect-ratio:1;border:0;border-radius:14px;background:var(--accent);color:var(--on-accent);font:700 30px var(--sans);cursor:pointer}
+.pcard.up{background:var(--surface2);color:var(--ink)}
+.pcard.ok{background:var(--green);color:#fff}
+.sqgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.sqpad{aspect-ratio:1.4;border:0;border-radius:18px;background:var(--c);font-size:44px;opacity:.55;transition:opacity .1s,transform .1s;cursor:pointer}
+.sqpad.lit{opacity:1;transform:scale(1.06);box-shadow:0 0 0 4px rgba(255,255,255,.75)}
+.tapbtn{display:grid;place-items:center;width:200px;height:200px;border-radius:50%;border:0;background:var(--accent);color:var(--on-accent);font-size:72px;margin:18px auto 6px;box-shadow:inset 0 -8px 0 rgba(0,0,0,.18)}
+.tapbtn small{font:700 15px var(--sans)}
+.tapbtn:active{transform:scale(.94)}
+
+/* ===== compact sizing ===== */
+body{font-size:14px;line-height:1.4}
+.hdr-in{padding:6px 10px;gap:4px 8px;min-width:0}
+.brand{gap:7px;min-width:0}
+.brand-mark{width:30px;height:30px;border-radius:9px;font-size:17px}
+.brand b{font-size:16px}
+.hdr-r{gap:6px;flex-wrap:wrap;min-width:0}
+.langs button{padding:4px 7px;font-size:12px;min-height:30px}
+.ptschip{padding:3px 8px;font-size:13px;min-height:30px;border-radius:10px}
+.tab{min-height:42px;font-size:12px;gap:4px;padding:4px 2px}
+.badge{min-width:17px;height:17px;font-size:11px;line-height:17px;padding:0 4px}
+.seatbar{margin-top:8px}
+.seatbar-in{padding:8px 10px;gap:8px 10px;border-radius:14px}
+.seat-info{gap:6px 8px;font-size:13px}
+.seat-ctrl{gap:6px}
+.seg button,.switch{padding:5px 8px;min-height:32px;font-size:12px}
+.btn{font-size:14px;min-height:36px;padding:7px 11px}
+.btn-lg{font-size:15px;min-height:44px;padding:10px 16px}
+.btn-sm{font-size:13px;min-height:32px;padding:5px 9px}
+.main{padding:10px 10px 20px}
+.view-head h1{font-size:20px}
+.sub,.hint{font-size:13px}
+.legend{font-size:12px}
+.tbl .stage{zoom:.8}
+.cap{font-size:12px}
+.chip{min-height:32px;padding:5px 11px;font-size:13px}
+.dish-art{height:54px;font-size:34px}
+.dish-body h3{font-size:15px}
+.dish-body p{font-size:12px}
+.price{font-size:14px}
+.stepper button{width:30px;height:30px;font-size:16px}
+.panel{padding:12px}
+.panel h2{font-size:18px}
+.msg{padding:10px;grid-template-columns:40px 1fr;gap:3px 9px}
+.avatar{width:40px;height:40px;font-size:22px}
+.msg-txt{font-size:14px}
+.dlg{padding:14px;border-radius:18px}
+.dlg h2{font-size:19px}
+.pay-head{margin:-14px -14px 12px;padding:12px 14px;border-radius:18px 18px 0 0}
+.qr-wrap{width:170px}
+.guest{padding:8px}
+.toast{font-size:13px;padding:9px 11px}
+.cartbar{padding:9px;font-size:14px;min-height:42px;bottom:calc(60px + env(safe-area-inset-bottom,0px))}
+body{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+.g-wrap{padding:8px 10px 30px}
+.g-title h2{font-size:19px}
+.g-card{padding:12px;border-radius:18px}
+.g-card.center{padding:18px 12px;gap:9px}
+.g-emoji{font-size:44px}
+.g-desc{font-size:14px}
+.score{font-size:46px}
+.rating{font-size:18px}
+.hud{font-size:14px}
+.tile{min-height:42px;font-size:14px;padding:7px 10px}
+.mcard{min-height:72px;font-size:24px;padding:6px 2px}
+.mcard small{font-size:12px}
+.pcard{font-size:24px}
+.sqpad{font-size:32px}
+.tapbtn{width:150px;height:150px;font-size:54px}
+.stackbox{font-size:22px;min-height:70px}
+.sumrow{font-size:13px;grid-template-columns:84px 1fr 40px}
+/* home */
+.hgrid{display:grid;gap:10px}
+.hcard{position:relative;display:flex;align-items:center;gap:12px;text-align:left;width:100%;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow);cursor:pointer;font-family:inherit}
+.hcard .he{font-size:32px;width:46px;height:46px;border-radius:13px;background:var(--surface2);display:grid;place-items:center;flex:none}
+.hcard .ht{display:grid;gap:2px;min-width:0}
+.hcard .ht b{font:700 16px var(--serif)}
+.hcard .ht small{color:var(--muted);font-size:12px}
+.hcard .badge{position:absolute;top:8px;right:10px}
+
+/* ===== phone fit fixes ===== */
+.menu-layout>*,.main>section,.main>section>*{min-width:0}
+.dishes{grid-template-columns:repeat(2,minmax(0,1fr))}
+.dish{min-width:0}
+.dish-body h3,.dish-body p{overflow-wrap:anywhere}
+.chips{max-width:calc(100vw - 20px)}
+.seat-ctrl{width:100%}
+.seat-ctrl .seg{flex:1}
+.seat-ctrl .seg button{flex:1;justify-content:center}
+.seat-info p{font-size:12px}
+.seatbar-in{padding:6px 8px;gap:6px}
+.floor{grid-template-columns:repeat(2,minmax(0,1fr))}
+.seat-ctrl{display:grid;grid-template-columns:1fr;gap:6px}
+.seat-ctrl .seg{width:100%}
+.seat-ctrl .seg button{white-space:nowrap}
+.seat-ctrl .switch{width:100%;justify-content:flex-start}
+.toasts{top:auto;bottom:calc(128px + env(safe-area-inset-bottom,0px))}
+.game .g-head{gap:6px 10px}
+
+/* =========================================================
+   MOBILE REWORK — phone screens 320–600px
+   ========================================================= */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100dvh;
+  padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+  box-shadow: none;
+}
+
+img, svg, video, canvas {
+  max-width: 100%;
+}
+
+button, input, select, textarea {
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  .hdr {
+    width: 100%;
+  }
+
+  .hdr-in {
+    width: 100%;
+    padding: 8px 10px;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .brand {
+    min-width: 0;
+    flex: 1 1 auto;
+    margin-right: 0;
+  }
+
+  .brand b {
+    font-size: 16px;
+    white-space: nowrap;
+  }
+
+  .brand-mark {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .hdr-r {
+    flex: 0 0 auto;
+    margin-left: 0;
+    gap: 5px;
+    max-width: 100%;
+  }
+
+  .langs button {
+    padding: 5px 7px;
+    min-height: 30px;
+  }
+
+  .ptschip {
+    min-height: 30px;
+    padding: 4px 7px;
+    font-size: 12px;
+  }
+
+  .seatbar {
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  .seatbar-in {
+    width: 100%;
+    padding: 9px;
+    gap: 8px;
+  }
+
+  .seat-info {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .seat-info p {
+    overflow-wrap: anywhere;
+  }
+
+  .seat-ctrl {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .seat-ctrl .seg {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .seat-ctrl .seg button {
+    min-width: 0;
+    width: 100%;
+    padding: 7px 4px;
+    white-space: normal;
+  }
+
+  .seat-ctrl .switch {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .main {
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 10px 22px;
+  }
+
+  .view-head {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .view-head h1 {
+    font-size: 22px;
+    overflow-wrap: anywhere;
+  }
+
+  .sub {
+    overflow-wrap: anywhere;
+  }
+
+  .room {
+    width: 100%;
+    padding: 28px 5px 32px;
+    overflow: hidden;
+  }
+
+  .floor {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px 2px;
+  }
+
+  .tbl {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .tbl .stage {
+    width: min(132px, 100%);
+    height: auto;
+    aspect-ratio: 1;
+    zoom: 1;
+  }
+
+  .disc {
+    left: 23.5%;
+    top: 23.5%;
+    width: 53%;
+    height: 53%;
+  }
+
+  .seat {
+    width: 23%;
+    height: 23%;
+    font-size: clamp(11px, 4vw, 17px);
+  }
+
+  .seat.s0 {
+    left: 38.5%;
+    top: 0;
+  }
+
+  .seat.s1 {
+    right: 0;
+    top: 38.5%;
+  }
+
+  .seat.s2 {
+    left: 38.5%;
+    bottom: 0;
+  }
+
+  .seat.s3 {
+    left: 0;
+    top: 38.5%;
+  }
+
+  .youtag {
+    right: 0;
+    bottom: 0;
+    font-size: 10px;
+    padding: 2px 5px;
+  }
+
+  .cap {
+    max-width: 100%;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .menu-layout {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dishes {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .dish {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dish-art {
+    height: 64px;
+    font-size: 36px;
+  }
+
+  .dish-body {
+    min-width: 0;
+    padding: 9px;
+  }
+
+  .dish-body h3,
+  .dish-body p {
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  .dish-foot {
+    min-width: 0;
+    padding: 7px 9px 10px;
+  }
+
+  .price {
+    max-width: 100%;
+  }
+
+  .stepper {
+    max-width: 100%;
+  }
+
+  .stepper button {
+    flex: 0 0 30px;
+  }
+
+  .panel {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .msg {
+    min-width: 0;
+  }
+
+  .msg-txt,
+  .msg-top,
+  .msg-act {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .dlg {
+    width: min(100%, 440px);
+    max-height: calc(100dvh - 20px);
+    margin: 10px 0;
+    padding: 14px;
+  }
+
+  .guest {
+    min-width: 0;
+  }
+
+  .guest small,
+  .guest b {
+    overflow-wrap: anywhere;
+  }
+
+  .pay-head {
+    min-width: 0;
+  }
+
+  .pay-head > div {
+    min-width: 0;
+  }
+
+  .qr-wrap {
+    width: min(170px, 65vw);
+  }
+
+  .cartbar {
+    width: calc(100% - 20px);
+    max-width: 456px;
+    bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .tabs {
+    width: 100%;
+    max-width: 600px;
+    left: 0;
+    transform: none;
+  }
+
+  .tab {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .tab span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .game {
+    width: 100%;
+    max-width: 100%;
+    left: 0;
+    right: 0;
+    transform: none;
+  }
+
+  .g-wrap {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px 10px calc(30px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .g-head,
+  .g-card,
+  .asm,
+  .tiles {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .g-title {
+    min-width: 0;
+  }
+
+  .g-title h2,
+  .g-title small,
+  .g-desc {
+    overflow-wrap: anywhere;
+  }
+
+  .stage-svg {
+    width: min(100%, 440px);
+    height: auto;
+  }
+
+  .tile {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .tile .ord {
+    flex: 0 0 auto;
+  }
+
+  .sumrows {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .sumrow {
+    grid-template-columns: minmax(70px, .8fr) minmax(0, 1fr) 40px;
+    min-width: 0;
+  }
+
+  .sumrow > * {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .memgrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .mcard {
+    min-width: 0;
+  }
+
+  .pgrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .sqgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tapbtn {
+    width: min(150px, 48vw);
+    height: min(150px, 48vw);
+  }
+
+  .toasts {
+    left: 10px;
+    right: 10px;
+    width: auto;
+    max-width: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .hdr-in {
+    gap: 5px;
+  }
+
+  .brand b {
+    font-size: 15px;
+  }
+
+  .brand-mark {
+    width: 29px;
+    height: 29px;
+    flex-basis: 29px;
+    font-size: 16px;
+  }
+
+  .ptschip {
+    display: none;
+  }
+
+  .main {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .dishes {
+    grid-template-columns: 1fr;
+  }
+
+  .dish-art {
+    height: 58px;
+  }
+
+  .floor {
+    gap: 5px 0;
+  }
+
+  .tbl .stage {
+    width: min(126px, 100%);
+  }
+
+  .sumrow {
+    grid-template-columns: 68px minmax(0, 1fr) 36px;
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  .g-steps {
+    max-width: 100%;
+    overflow: hidden;
+  }
+}
+
+/* Desktop/tablet: don't keep the whole site locked to a 480px phone width. */
+@media (min-width: 601px) {
+  body {
+    max-width: none;
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+    padding-bottom: 0;
+  }
+
+  .hdr-in,
+  .seatbar,
+  .main {
+    max-width: 1180px;
+  }
+
+  .tabs {
+    position: static;
+    width: auto;
+    transform: none;
+    border-radius: 14px;
+    padding: 4px;
+    box-shadow: none;
+    border-top: 0;
+  }
+
+  .tab {
+    min-height: 40px;
+    font-size: 15px;
+    padding: 9px 14px;
+  }
+
+  .brand small {
+    display: block;
+  }
+
+  .floor {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dishes {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  }
+
+  .panel.sticky {
+    position: sticky;
+    top: 90px;
+  }
+
+  .game {
+    left: 0;
+    right: 0;
+    width: auto;
+    transform: none;
+  }
+}
+
+</style>
+</head>
+<body>
+<noscript><div style="padding:24px 16px;font:700 17px/1.4 system-ui,sans-serif;color:#17262b;background:#fbfbf8;text-align:center">Откройте файл в браузере (Safari / Chrome) — предпросмотр «Файлов» не запускает JavaScript.<br><br>Open this file in a browser (Safari / Chrome): the Files preview does not run JavaScript.</div></noscript>
+<div id="app">
+  <header class="hdr" id="hdr"></header>
+  <div class="seatbar" id="seatbar"></div>
+  <main id="main" class="main"></main>
+</div>
+<div id="modal-root"></div>
+<div id="game-root" class="game" role="dialog" aria-modal="true"></div>
+<div id="toast-root" class="toasts" aria-live="polite"></div>
+
+
+<script>
+(function(){
+'use strict';
+
+/* ============ helpers ============ */
+const $=(s,r)=>(r||document).querySelector(s);
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const rint=(a,b)=>Math.floor(rnd(a,b+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,'\u00a0')+'\u00a0₸';
+const mmss=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+
+/* ============ i18n ============ */
+const LANGS=['en','ru','kz'];
+const LIDX={en:0,ru:1,kz:2};
+const HLANG={en:'en',ru:'ru',kz:'kk'};
+/*I18N-START*/
+const I18N={
+en:{
+docTitle:"Match&Flavor — Digital Dining & Cook-Off Arena",tagline:"Digital dining & cook-off arena",
+tabFloor:"Floor plan",tabMenu:"Food",tabInbox:"Inbox",pts:"pts",balanceLine:"Balance: {p} pts",
+statusOpen:"Open to Connect",statusPrivate:"Not sociable",dnd:"Do Not Disturb",
+dndHint:"Muted: guest messages and duel requests are blocked. Waiter updates still arrive quietly.",
+dndOn:"Do Not Disturb is on — guest messages and duel requests are paused.",dndOff:"Do Not Disturb is off — invitations can reach you again.",
+statusSet_open:"You're now Open to Connect (green).",statusSet_private:"You're now Not sociable (red). Guests won't send invitations.",
+walking:"Walking guest — you aren't seated yet. Pick a gray table to sit down.",seatedAt:"Seated at Table #{n}",
+leave:"Stand up from the table",leaveBlocked:"Your order is still on its way — you can stand up once it's served.",
+legendEmpty:"Empty",legendOpen:"Extrovert · Open",legendPrivate:"Not sociable",legendYou:"You",
+tableN:"Table #{n}",seatsCount:"{c}/4 seats",floorTitle:"Restaurant floor",floorSub:"20 tables — tap a free one to sit down, or an occupied one to challenge a guest or ask to join.",
+kitchen:"Kitchen",entrance:"Entrance",sitTitle:"Sit at Table #{n}",sitText:"This table is free. Sit down and it will show as “{status}”.",
+sitBtn:"Sit at this table",alreadySeated:"You're already seated at Table #{n}. Stand up first to sit somewhere else.",
+cancel:"Cancel",close:"Close",guestsAt:"Guests at Table #{n}",tableOpenNote:"This table is extrovert — open to meeting new people.",tablePrivateNote:"This table prefers privacy.",
+youHereTitle:"Your table",youHereText:"You're seated here. Your table shows as “{status}”.",
+challenge:"Challenge to Culinary Duel",privateGuest:"Not sociable — messages are unavailable",needSeat:"To challenge someone, sit down first so your opponent knows where to find you.",
+pendingChallenge:"You already have a request waiting for a reply.",finishGameFirst:"Finish your current game first.",
+tSat:"You sat down at Table #{n}. Welcome!",joinBtn:"Ask to join",joinOut:"You asked to join Table #{n}.",jreply_accepted:"{name} said yes — you can join the table!",jreply_declined:"{name} politely declined — they would rather keep the table to themselves.",jreply_left:"{name} left before replying.",jreply_noroom:"{name} did not mind, but joining is no longer possible.",tJoinSent:"Request sent to Table #{n}.",tJoined:"You joined Table #{n}!",tableFull:"This table is full — no free seats.",sitBanner:"Your cart is waiting. Choose a free table to sit at (or ask to join someone), then pay.",tLeft:"You stood up — your seat is free again.",tChallengeSent:"Challenge delivered to Table #{n}.",
+tReplySent:"Reply sent to Table #{n}.",tDeclined:"Declined.",tNewMsg:"New message from Table #{n}",tNewDuel:"Duel challenge from Table #{n}!",
+tReply:"Reply from {name}",tQuit:"You left the kitchen.",tPaid:"Payment confirmed.",
+duelInvite:"Guest from Table #{n} has challenged you to a Culinary Cook-Off!",
+s1:"Hello from Table #{n}! We ordered a big Tiramisu — would you like to share a slice?",
+s2:"Table #{n} here. Would you like to swap dish recommendations? We'd love to hear what you ordered.",
+s3:"Cheers from Table #{n}! Care to raise a glass of lemonade with us?",
+s4:"We're celebrating a birthday at Table #{n}. Would you like to say hello?",
+reply_accepted:"{name} accepted your challenge. Ready when you are!",reply_declined:"{name} politely declined your challenge.",reply_left:"{name} left the restaurant before replying.",
+startDuel:"Start Duel",accept:"Accept",decline:"Decline",
+ms_pending:"Awaiting reply",ms_accepted:"Accepted",ms_declined:"Declined",ms_expired:"Expired",ms_started:"Started",ms_left:"Guest left",
+deliveredTo:"Delivered to Table #{n}",inboxTitle:"Inbox",inboxSub:"Guest invitations and waiter updates.",
+inboxEmpty:"No messages yet. Guests will reach out at a calm pace.",paceLabel:"Message pace",paceCalm:"Calm (30–60 s)",paceQuick:"Quick demo",
+waiter:"Waiter",waiter1:"Your dish is ready! The waiter is bringing your order to Table #{n}...",waiter2:"The waiter has served your meal at your table. Bon appétit!",
+menuTitle:"Menu",menuSub:"All prices in Kazakhstani tenge (₸).",cat_all:"All",cat_pizza:"Pizza",cat_grill:"Grill",cat_starters:"Starters",cat_national:"National",cat_dessert:"Desserts",cat_drinks:"Drinks",
+add:"Add",cartTitle:"Your cart",cartEmpty:"Your cart is empty. Add something tasty!",subtotal:"Subtotal",usePoints:"Redeem loyalty points (1 pt = 1 ₸, up to 30%)",
+pointsDiscount:"Points discount",total:"Total",payQr:"Pay with QR",chooseTable:"Choose where to sit",
+seatNeededCart:"Your order is ready to pay — sit at a table so the waiter knows where to bring it.",
+ordersTitle:"Your orders",orderN:"Order #{n}",os_cooking:"Being prepared",os_bringing:"Waiter is on the way",os_served:"Served",qtyDec:"Decrease quantity",qtyInc:"Increase quantity",
+payTitle:"QR payment",merchant:"Match&Flavor Restaurant",payScan:"Open your banking app, tap “QR” and scan the code below.",payDemo:"Demo QR — no real payment is made.",
+qrExpires:"Code valid for {t}",qrExpired:"QR code expired",refreshQr:"Refresh QR",confirmPaid:"I've paid — confirm",processing:"Confirming payment…",
+paidOk:"Payment received! Heading to the kitchen…",deliveredToTable:"Delivery to Table #{n}",loyaltyUsed:"Loyalty points used",
+gameSingle:"Cooking Challenge",gameDuel:"Culinary Duel vs {name}",quit:"Quit",stageOf:"Stage {i} of {n}",start:"Start",nextStage:"Next stage",seeResults:"See results",
+st_dough:"Dough",st_prep:"Prep & slicing",st_grill:"Grill",st_assembly:"Assembly",st_oven:"Wood-fired oven",
+intro_dough:"Knead the dough by dragging back and forth across it. Then press and drag outward from the centre to stretch it to the dashed ring (30 cm). Release to lock it in — real dough springs back about 4%!",
+intro_prep:"Slice each ingredient on the board. Tap, click, or press Space exactly when the knife crosses the solid guide line. 3 ingredients × 3 cuts.",
+intro_grill:"Sear the steak. Flip it with the tongs when the meter is inside the green zone, then take it off the grill in the green zone on the second side. Don't let it burn!",
+intro_assembly:"Build the pizza in authentic order. Chef's rule: sauce → cheese → cooked meats (beef, then pepperoni) → vegetables → fresh herbs last. Tap the ingredients in that order.",
+intro_oven:"Slide the pizza into the wood-fired oven. Watch the crust colour and pull it out with the peel when it turns golden — before it chars!",
+diameter:"Diameter",cm:"cm",target:"Target",kneadMeter:"Kneading",stretchMeter:"Stretching",
+hintKnead:"Drag back and forth across the dough to knead it.",hintStretch:"Now press and drag outward from the centre. Release to lock the size.",
+cutN:"Cut",hintSlice:"Cut when the blade crosses the solid line.",cutFb:"Last cut: {p}% accurate",slice:"Slice!",
+pi_tomato:"Tomato",pi_onion:"Red onion",pi_pepperoni:"Pepperoni",
+searLevel:"Sear level",side1:"Side 1",side2:"Side 2",flip:"Flip with tongs",takeOff:"Take off the grill",greenZone:"Aim for the green zone",
+layerN:"Layer {i} of {n}",ing_sauce:"Tomato sauce",ing_mozz:"Mozzarella",ing_beef:"Grilled beef",ing_pepperoni:"Pepperoni",ing_onion:"Red onion",ing_basil:"Fresh basil",
+undo:"Undo",toOven:"Send to the oven",bakeLevel:"Crust",pull:"Pull out with peel",ovenHint:"Watch the crust — the flames flicker, so the heat isn't constant.",
+rate_perfect:"Perfect!",rate_great:"Great",rate_decent:"Decent",rate_low:"Needs work",
+fb_dough:"Stretched to {d} cm (target 30 cm)",fb_prep:"Average cut precision: {p}%",fb_grill:"Side 1 off at {a}% · side 2 off at {b}% (ideal ≈ 65%)",
+fb_assembly:"{c} of {n} layers in the right place",fb_oven:"Pulled out at {a}% bake (ideal ≈ 68%)",fb_ovenBurnt:"Burnt to a crisp — the crust turned to charcoal!",
+resTitle:"Kitchen results",accuracy:"Accuracy",passLine:"Pass threshold: above 60%",passed:"Passed!",failed:"Below the threshold",
+ptsEarned:"+{p} loyalty points",noPts:"No points this time — aim above 60% next time.",duelWin:"You won the duel!",duelLose:"{name} won this time.",duelDraw:"It's a draw!",
+youVs:"You {a}% · {name} {b}%",doubleBonus:"Double reward ×2 for beating a guest",duelNoPts:"Only the winner takes points — a draw pays standard points.",
+backToRestaurant:"Back to the restaurant",quitTitle:"Leave the kitchen?",quitTextSingle:"Your order will still be served, but you'll forfeit the loyalty points.",
+quitTextDuel:"Leaving counts as a forfeit and earns no points.",keepCooking:"Keep cooking",quitYes:"Leave the kitchen",
+tabHome:"Home",homeTitle:"Welcome to Match&Flavor",homeSub:"What would you like to do?",homeFood:"Order food",homeFoodSub:"Pick dishes, pay by QR, play a mini-game",homeFloor:"Sit at a table",homeFloorSub:"Pick a free table or join someone",homeInbox:"Messages",homeInboxSub:"Invitations and waiter updates",
+gMemo:"Memorize these ingredients!",gPick:"Tap the ones you saw ({c}/{n})",gDone:"Done",gMiss:"Mistakes",gMoves:"Moves",gFound:"Pairs",gRound:"Round {i} of {n}",gSeqWatch:"Watch…",gSeqGo:"Your turn!",gStop:"Stop!",gTaps:"Taps",gTime:"Time",gTapGo:"Tap fast!",fb_stack:"Assembled with {m} mistake(s)",fb_memory:"Remembered {c} of {n} ingredients",fb_pairs:"All pairs found in {m} moves",fb_seq:"Repeated {c} of {n} steps correctly",fb_gauge:"Average timing: {a}%",fb_tap:"{n} taps in time"
+},
+ru:{
+docTitle:"Дастархан — цифровой ресторан и кулинарная арена",tagline:"Цифровой ресторан и кулинарная арена",
+tabFloor:"Зал",tabMenu:"Еда",tabInbox:"Сообщения",pts:"балл.",balanceLine:"Баланс: {p} балл.",
+statusOpen:"Открыт к общению",statusPrivate:"Не общительный",dnd:"Не беспокоить",
+dndHint:"Включено: сообщения гостей и вызовы заблокированы. Уведомления официанта приходят без звука.",
+dndOn:"Режим «Не беспокоить» включён — сообщения гостей и вызовы приостановлены.",dndOff:"Режим «Не беспокоить» выключен — приглашения снова доступны.",
+statusSet_open:"Теперь вы открыты к общению (зелёный).",statusSet_private:"Теперь у вас статус «Не общительный» (красный). Приглашения не приходят.",
+walking:"Гость без места — вы ещё не за столом. Выберите серый стол, чтобы сесть.",seatedAt:"Вы за столом №{n}",
+leave:"Встать из-за стола",leaveBlocked:"Заказ ещё в пути — встать из-за стола можно после подачи.",
+legendEmpty:"Свободен",legendOpen:"Экстраверт · открыт",legendPrivate:"Не общительный",legendYou:"Вы",
+tableN:"Стол №{n}",seatsCount:"{c}/4 мест",floorTitle:"Зал ресторана",floorSub:"20 столов — нажмите на свободный, чтобы сесть, или на занятый — чтобы бросить вызов гостю либо попроситься подсесть.",
+kitchen:"Кухня",entrance:"Вход",sitTitle:"Сесть за стол №{n}",sitText:"Стол свободен. Присаживайтесь — он будет отображаться как «{status}».",
+sitBtn:"Сесть за этот стол",alreadySeated:"Вы уже сидите за столом №{n}. Сначала встаньте, чтобы пересесть.",
+cancel:"Отмена",close:"Закрыть",guestsAt:"Гости за столом №{n}",tableOpenNote:"Этот стол — экстраверты, открыты к знакомствам.",tablePrivateNote:"Этот стол предпочитает уединение.",
+youHereTitle:"Ваш стол",youHereText:"Вы сидите здесь. Стол отображается как «{status}».",
+challenge:"Кулинарный бой",privateGuest:"Не общительный — писать ему нельзя",needSeat:"Чтобы бросить вызов, сначала сядьте за стол — так соперник узнает, где вас найти.",
+pendingChallenge:"У вас уже есть запрос, ожидающий ответа.",finishGameFirst:"Сначала завершите текущую игру.",
+tSat:"Вы сели за стол №{n}. Добро пожаловать!",joinBtn:"Подсесть",joinOut:"Вы попросились подсесть за стол №{n}.",jreply_accepted:"{name} разрешил(а) вам подсесть — присаживайтесь!",jreply_declined:"{name} вежливо отказал(а): хочет посидеть без компании.",jreply_left:"{name} ушёл(ушла), не успев ответить.",jreply_noroom:"{name} не против, но подсесть уже не получится.",tJoinSent:"Просьба подсесть отправлена за стол №{n}.",tJoined:"Вы подсели за стол №{n}!",tableFull:"Стол занят полностью — свободных мест нет.",sitBanner:"Заказ ждёт в корзине. Выберите свободный стол и сядьте (или попроситесь подсесть к кому-то), затем оплатите.",tLeft:"Вы встали из-за стола — место свободно.",tChallengeSent:"Вызов доставлен за стол №{n}.",
+tReplySent:"Ответ отправлен за стол №{n}.",tDeclined:"Отклонено.",tNewMsg:"Новое сообщение со стола №{n}",tNewDuel:"Вызов на дуэль со стола №{n}!",
+tReply:"Ответ от {name}",tQuit:"Вы покинули кухню.",tPaid:"Оплата подтверждена.",
+duelInvite:"Гость со стола №{n} бросил вам вызов на кулинарную дуэль!",
+s1:"Привет со стола №{n}! Мы заказали большой тирамису — не хотите разделить кусочек?",
+s2:"Это стол №{n}. Давайте обменяемся рекомендациями по блюдам? Нам интересно, что заказали вы.",
+s3:"За ваше здоровье со стола №{n}! Поднимем бокалы с лимонадом вместе?",
+s4:"У нас за столом №{n} день рождения. Хотите поздороваться?",
+reply_accepted:"{name} принял(а) ваш вызов. Готовы начинать?",reply_declined:"{name} вежливо отклонил(а) ваш вызов.",reply_left:"{name} покинул(а) ресторан, не успев ответить.",
+startDuel:"Начать дуэль",accept:"Принять",decline:"Отклонить",
+ms_pending:"Ждём ответа",ms_accepted:"Принято",ms_declined:"Отклонено",ms_expired:"Истекло",ms_started:"Начато",ms_left:"Гость ушёл",
+deliveredTo:"Доставлено за стол №{n}",inboxTitle:"Сообщения",inboxSub:"Приглашения гостей и уведомления официанта.",
+inboxEmpty:"Сообщений пока нет. Гости будут писать неспешно.",paceLabel:"Темп сообщений",paceCalm:"Спокойный (30–60 с)",paceQuick:"Быстрая демо",
+waiter:"Официант",waiter1:"Ваше блюдо готово! Официант несёт заказ к столу №{n}...",waiter2:"Официант подал ваш заказ к столу. Приятного аппетита!",
+menuTitle:"Меню",menuSub:"Все цены в казахстанских тенге (₸).",cat_all:"Все",cat_pizza:"Пицца",cat_grill:"Гриль",cat_starters:"Закуски",cat_national:"Национальная кухня",cat_dessert:"Десерты",cat_drinks:"Напитки",
+add:"Добавить",cartTitle:"Ваша корзина",cartEmpty:"Корзина пуста. Добавьте что-нибудь вкусное!",subtotal:"Сумма",usePoints:"Списать баллы лояльности (1 балл = 1 ₸, до 30%)",
+pointsDiscount:"Скидка баллами",total:"Итого",payQr:"Оплатить по QR",chooseTable:"Выбрать, куда сесть",
+seatNeededCart:"Заказ готов к оплате — сядьте за стол, чтобы официант знал, куда его нести.",
+ordersTitle:"Ваши заказы",orderN:"Заказ №{n}",os_cooking:"Готовится",os_bringing:"Официант несёт заказ",os_served:"Подано",qtyDec:"Уменьшить количество",qtyInc:"Увеличить количество",
+payTitle:"Оплата по QR",merchant:"Ресторан «Дастархан»",payScan:"Откройте банковское приложение, нажмите «QR» и отсканируйте код ниже.",payDemo:"Демо-QR — реальный платёж не производится.",
+qrExpires:"Код действует {t}",qrExpired:"Срок действия QR истёк",refreshQr:"Обновить QR",confirmPaid:"Я оплатил(а) — подтвердить",processing:"Подтверждаем оплату…",
+paidOk:"Оплата получена! Идём на кухню…",deliveredToTable:"Доставка к столу №{n}",loyaltyUsed:"Списано баллов",
+gameSingle:"Кулинарное испытание",gameDuel:"Кулинарная дуэль: {name}",quit:"Выйти",stageOf:"Этап {i} из {n}",start:"Начать",nextStage:"Дальше",seeResults:"К результатам",
+st_dough:"Тесто",st_prep:"Нарезка",st_grill:"Гриль",st_assembly:"Сборка",st_oven:"Дровяная печь",
+intro_dough:"Замесите тесто, водя по нему туда-сюда. Затем нажмите и тяните от центра наружу, чтобы растянуть его до пунктирного круга (30 см). Отпустите, чтобы зафиксировать — настоящее тесто усаживается примерно на 4%!",
+intro_prep:"Нарежьте каждый продукт на доске. Нажмите, кликните или нажмите пробел ровно тогда, когда нож пересекает сплошную линию. 3 продукта × 3 разреза.",
+intro_grill:"Обжарьте стейк. Переверните его щипцами, когда шкала в зелёной зоне, затем снимите с гриля в зелёной зоне со второй стороны. Не дайте ему подгореть!",
+intro_assembly:"Соберите пиццу в правильном порядке. Правило шефа: соус → сыр → готовое мясо (сначала говядина, затем пепперони) → овощи → свежая зелень в конце. Нажимайте ингредиенты в этом порядке.",
+intro_oven:"Отправьте пиццу в дровяную печь. Следите за цветом корочки и достаньте лопатой, когда она станет золотистой — пока не подгорела!",
+diameter:"Диаметр",cm:"см",target:"Цель",kneadMeter:"Замес",stretchMeter:"Растяжка",
+hintKnead:"Водите по тесту туда-сюда, чтобы замесить его.",hintStretch:"Теперь нажмите и тяните от центра наружу. Отпустите, чтобы зафиксировать размер.",
+cutN:"Разрез",hintSlice:"Режьте, когда лезвие пересекает сплошную линию.",cutFb:"Последний разрез: точность {p}%",slice:"Резать!",
+pi_tomato:"Помидор",pi_onion:"Красный лук",pi_pepperoni:"Пепперони",
+searLevel:"Степень обжарки",side1:"Сторона 1",side2:"Сторона 2",flip:"Перевернуть щипцами",takeOff:"Снять с гриля",greenZone:"Целитесь в зелёную зону",
+layerN:"Слой {i} из {n}",ing_sauce:"Томатный соус",ing_mozz:"Моцарелла",ing_beef:"Мясо с гриля",ing_pepperoni:"Пепперони",ing_onion:"Красный лук",ing_basil:"Свежий базилик",
+undo:"Отменить",toOven:"Отправить в печь",bakeLevel:"Корочка",pull:"Достать лопатой",ovenHint:"Следите за корочкой — пламя колеблется, жар непостоянен.",
+rate_perfect:"Идеально!",rate_great:"Отлично",rate_decent:"Неплохо",rate_low:"Нужно лучше",
+fb_dough:"Растянуто до {d} см (цель — 30 см)",fb_prep:"Средняя точность разрезов: {p}%",fb_grill:"Сторона 1 снята на {a}% · сторона 2 на {b}% (идеал ≈ 65%)",
+fb_assembly:"{c} из {n} слоёв на своих местах",fb_oven:"Достали при {a}% выпечки (идеал ≈ 68%)",fb_ovenBurnt:"Сгорело дотла — корочка превратилась в уголь!",
+resTitle:"Итоги на кухне",accuracy:"Точность",passLine:"Порог зачёта: выше 60%",passed:"Зачёт!",failed:"Ниже порога",
+ptsEarned:"+{p} баллов лояльности",noPts:"В этот раз без баллов — стремитесь выше 60%.",duelWin:"Вы победили в дуэли!",duelLose:"На этот раз победил(а) {name}.",duelDraw:"Ничья!",
+youVs:"Вы {a}% · {name} {b}%",doubleBonus:"Двойная награда ×2 за победу над гостем",duelNoPts:"Баллы получает только победитель — за ничью начисляются обычные баллы.",
+backToRestaurant:"Вернуться в зал",quitTitle:"Покинуть кухню?",quitTextSingle:"Заказ всё равно подадут, но баллы лояльности вы потеряете.",
+quitTextDuel:"Выход считается сдачей, баллы не начисляются.",keepCooking:"Продолжить готовить",quitYes:"Покинуть кухню",
+tabHome:"Меню",homeTitle:"Добро пожаловать в Дастархан",homeSub:"Что хотите сделать?",homeFood:"Заказать еду",homeFoodSub:"Выберите блюда, оплатите по QR, сыграйте в мини-игру",homeFloor:"Сесть за стол",homeFloorSub:"Свободный стол или подсесть к кому-то",homeInbox:"Сообщения",homeInboxSub:"Приглашения и новости от официанта",
+gMemo:"Запомните эти ингредиенты!",gPick:"Нажмите на те, что видели ({c}/{n})",gDone:"Готово",gMiss:"Ошибки",gMoves:"Ходы",gFound:"Пары",gRound:"Раунд {i} из {n}",gSeqWatch:"Смотрите…",gSeqGo:"Ваш ход!",gStop:"Стоп!",gTaps:"Нажатия",gTime:"Время",gTapGo:"Жмите быстрее!",fb_stack:"Собрано, ошибок: {m}",fb_memory:"Вспомнили {c} из {n} ингредиентов",fb_pairs:"Все пары найдены за {m} ходов",fb_seq:"Верно повторено {c} из {n} шагов",fb_gauge:"Средняя точность по времени: {a}%",fb_tap:"Нажатий: {n}"
+},
+kz:{
+docTitle:"Дастархан — цифрлық мейрамхана және аспаздық сайыс аренасы",tagline:"Цифрлық мейрамхана және аспаздық арена",
+tabFloor:"Зал",tabMenu:"Тағам",tabInbox:"Хабарламалар",pts:"ұпай",balanceLine:"Баланс: {p} ұпай",
+statusOpen:"Сөйлесуге ашық",statusPrivate:"Көпшіл емес",dnd:"Мазаламаңыз",
+dndHint:"Қосулы: қонақ хабарламалары мен дуэль шақырулары бұғатталған. Даяшы хабарламалары үнсіз келеді.",
+dndOn:"«Мазаламаңыз» режимі қосулы — қонақ хабарламалары мен шақырулар тоқтатылды.",dndOff:"«Мазаламаңыз» режимі өшірулі — шақырулар қайта келе алады.",
+statusSet_open:"Енді сіз сөйлесуге ашықсыз (жасыл).",statusSet_private:"Енді сіз көпшіл емессіз (қызыл). Шақырулар келмейді.",
+walking:"Орнықпаған қонақ — әлі үстелге отырмадыңыз. Отыру үшін сұр үстелді таңдаңыз.",seatedAt:"Сіз №{n} үстелде отырсыз",
+leave:"Үстелден тұру",leaveBlocked:"Тапсырысыңыз әлі жолда — ұсынылғаннан кейін тұра аласыз.",
+legendEmpty:"Бос",legendOpen:"Экстроверт · ашық",legendPrivate:"Көпшіл емес",legendYou:"Сіз",
+tableN:"№{n} үстел",seatsCount:"{c}/4 орын",floorTitle:"Мейрамхана залы",floorSub:"20 үстел — отыру үшін бос үстелді, ал қонаққа шақыру жолдау немесе қосылуға рұқсат сұрау үшін бос емес үстелді басыңыз.",
+kitchen:"Асүй",entrance:"Кіреберіс",sitTitle:"№{n} үстелге отыру",sitText:"Үстел бос. Отырыңыз — ол «{status}» болып көрінеді.",
+sitBtn:"Осы үстелге отыру",alreadySeated:"Сіз №{n} үстелде отырсыз. Басқа үстелге отыру үшін алдымен тұрыңыз.",
+cancel:"Болдырмау",close:"Жабу",guestsAt:"№{n} үстелдегі қонақтар",tableOpenNote:"Бұл үстел — экстраверттер, жаңа таныстыққа ашық.",tablePrivateNote:"Бұл үстел оңашаланғанды қалайды.",
+youHereTitle:"Сіздің үстеліңіз",youHereText:"Сіз осында отырсыз. Үстел «{status}» болып көрінеді.",
+challenge:"Аспаздық дуэльге шақыру",privateGuest:"Көпшіл емес — хабарлама жазуға болмайды",needSeat:"Шақыру үшін алдымен үстелге отырыңыз — қарсыласыңыз сізді табуы үшін.",
+pendingChallenge:"Жауап күтіп тұрған сұранысыңыз бар.",finishGameFirst:"Алдымен ағымдағы ойынды аяқтаңыз.",
+tSat:"Сіз №{n} үстелге отырдыңыз. Қош келдіңіз!",joinBtn:"Қосылу",joinOut:"Сіз №{n} үстелге қосылуға рұқсат сұрадыңыз.",jreply_accepted:"{name} рұқсат берді — үстелге отырыңыз!",jreply_declined:"{name} сыпайы түрде бас тартты: жалғыз отырғысы келеді.",jreply_left:"{name} жауап бермей кетіп қалды.",jreply_noroom:"{name} қарсы емес, бірақ енді қосылу мүмкін емес.",tJoinSent:"Сұраныс №{n} үстелге жіберілді.",tJoined:"Сіз №{n} үстелге қосылдыңыз!",tableFull:"Үстел толы — бос орын жоқ.",sitBanner:"Тапсырыс себетте күтіп тұр. Бос үстел таңдап отырыңыз (немесе біреуге қосылуға рұқсат сұраңыз), сосын төлеңіз.",tLeft:"Сіз үстелден тұрдыңыз — орын босады.",tChallengeSent:"Шақыру №{n} үстелге жеткізілді.",
+tReplySent:"Жауап №{n} үстелге жіберілді.",tDeclined:"Бас тартылды.",tNewMsg:"№{n} үстелден жаңа хабарлама",tNewDuel:"№{n} үстелден дуэль шақыруы!",
+tReply:"{name} жауап берді",tQuit:"Сіз асүйден шықтыңыз.",tPaid:"Төлем расталды.",
+duelInvite:"№{n} үстелдегі қонақ сізге аспаздық дуэльге шақыру жолдады!",
+s1:"№{n} үстелден сәлем! Біз үлкен тирамису тапсырдық — бір тілім бөлісесіз бе?",
+s2:"Бұл №{n} үстел. Тағам бойынша кеңестермен алмасайық па? Сіз не тапсырғаныңызды білгіміз келеді.",
+s3:"№{n} үстелден денсаулығыңызға! Лимонад қосып бірге тост көтерейік пе?",
+s4:"№{n} үстелде туған күн тойлап жатырмыз. Сәлемдесесіз бе?",
+reply_accepted:"{name} шақыруыңызды қабылдады. Бастауға дайынсыз ба?",reply_declined:"{name} шақыруыңыздан сыпайы түрде бас тартты.",reply_left:"{name} жауап бермей мейрамханадан кетіп қалды.",
+startDuel:"Дуэльді бастау",accept:"Қабылдау",decline:"Бас тарту",
+ms_pending:"Жауап күтілуде",ms_accepted:"Қабылданды",ms_declined:"Бас тартылды",ms_expired:"Мерзімі өтті",ms_started:"Басталды",ms_left:"Қонақ кетті",
+deliveredTo:"№{n} үстелге жеткізілді",inboxTitle:"Хабарламалар",inboxSub:"Қонақ шақырулары мен даяшы хабарламалары.",
+inboxEmpty:"Әзірге хабарлама жоқ. Қонақтар асықпай жазады.",paceLabel:"Хабарлама қарқыны",paceCalm:"Баяу (30–60 с)",paceQuick:"Жылдам демо",
+waiter:"Даяшы",waiter1:"Тағамыңыз дайын! Даяшы тапсырысты №{n} үстелге алып келе жатыр...",waiter2:"Даяшы тапсырысыңызды үстелге қойды. Тамағыңыз дәмді болсын!",
+menuTitle:"Мәзір",menuSub:"Барлық баға қазақстандық теңгемен (₸).",cat_all:"Барлығы",cat_pizza:"Пицца",cat_grill:"Гриль",cat_starters:"Тіскебасар",cat_national:"Ұлттық тағамдар",cat_dessert:"Тәттілер",cat_drinks:"Сусындар",
+add:"Қосу",cartTitle:"Сіздің себетіңіз",cartEmpty:"Себет бос. Дәмді бірдеңе қосыңыз!",subtotal:"Сомасы",usePoints:"Адалдық ұпайларын жұмсау (1 ұпай = 1 ₸, 30%-ға дейін)",
+pointsDiscount:"Ұпай жеңілдігі",total:"Жиыны",payQr:"QR арқылы төлеу",chooseTable:"Қайда отыратыныңызды таңдаңыз",
+seatNeededCart:"Тапсырыс төлеуге дайын — даяшы қайда әкелетінін білуі үшін үстелге отырыңыз.",
+ordersTitle:"Тапсырыстарыңыз",orderN:"№{n} тапсырыс",os_cooking:"Дайындалуда",os_bringing:"Даяшы алып келе жатыр",os_served:"Ұсынылды",qtyDec:"Санын азайту",qtyInc:"Санын көбейту",
+payTitle:"QR арқылы төлем",merchant:"«Дастархан» мейрамханасы",payScan:"Банк қосымшасын ашып, «QR» түймесін басыңыз да, төмендегі кодты сканерлеңіз.",payDemo:"Демо-QR — нақты төлем жасалмайды.",
+qrExpires:"Код {t} жарамды",qrExpired:"QR мерзімі өтті",refreshQr:"QR жаңарту",confirmPaid:"Төледім — растау",processing:"Төлем расталуда…",
+paidOk:"Төлем қабылданды! Асүйге барамыз…",deliveredToTable:"№{n} үстелге жеткізу",loyaltyUsed:"Жұмсалған ұпай",
+gameSingle:"Аспаздық сынақ",gameDuel:"Аспаздық дуэль: {name}",quit:"Шығу",stageOf:"{i}-кезең, барлығы {n}",start:"Бастау",nextStage:"Келесі кезең",seeResults:"Нәтижені көру",
+st_dough:"Қамыр",st_prep:"Турау",st_grill:"Гриль",st_assembly:"Жинау",st_oven:"Отын пеші",
+intro_dough:"Қамырды алға-артқа сүйреп иленіз. Содан кейін ортадан сыртқа қарай басып, нүктелі шеңберге (30 см) дейін созыңыз. Бекіту үшін жіберіңіз — нағыз қамыр шамамен 4% қайтып жиырылады!",
+intro_prep:"Тақтайдағы әр өнімді тураңыз. Пышақ тұтас бағыттаушы сызықтан өткен сәтте басыңыз немесе Space пернесін басыңыз. 3 өнім × 3 тілік.",
+intro_grill:"Стейкті қуырыңыз. Шкала жасыл аймақта болғанда қыспақпен аударыңыз, содан кейін екінші жағы жасыл аймаққа жеткенде грильден алыңыз. Күйдіріп алмаңыз!",
+intro_assembly:"Пиццаны дұрыс ретпен жинаңыз. Аспазшы ережесі: тұздық → ірімшік → піскен ет (алдымен сиыр еті, содан кейін пепперони) → көкөністер → ең соңында жаңа шөптер. Ингредиенттерді осы ретпен басыңыз.",
+intro_oven:"Пиццаны отын пешіне салыңыз. Қыртыстың түсін бақылап, алтындай болғанда күрекпен алыңыз — күйіп кетпей тұрып!",
+diameter:"Диаметр",cm:"см",target:"Мақсат",kneadMeter:"Илеу",stretchMeter:"Созу",
+hintKnead:"Қамырды илеу үшін оны алға-артқа сүйреңіз.",hintStretch:"Енді ортадан сыртқа қарай басып сүйреңіз. Өлшемді бекіту үшін жіберіңіз.",
+cutN:"Тілік",hintSlice:"Пышақ тұтас сызықтан өткен сәтте тіліңіз.",cutFb:"Соңғы тілік: дәлдігі {p}%",slice:"Тілу!",
+pi_tomato:"Қызанақ",pi_onion:"Қызыл пияз",pi_pepperoni:"Пепперони",
+searLevel:"Қуыру деңгейі",side1:"1-жағы",side2:"2-жағы",flip:"Қыспақпен аудару",takeOff:"Грильден алу",greenZone:"Жасыл аймаққа мақсат алыңыз",
+layerN:"{i}-қабат, барлығы {n}",ing_sauce:"Қызанақ тұздығы",ing_mozz:"Моцарелла",ing_beef:"Грильдегі ет",ing_pepperoni:"Пепперони",ing_onion:"Қызыл пияз",ing_basil:"Жаңа базилик",
+undo:"Болдырмау",toOven:"Пешке жіберу",bakeLevel:"Қыртыс",pull:"Күрекпен алу",ovenHint:"Қыртысты бақылаңыз — жалын тербеледі, сондықтан қызу тұрақсыз.",
+rate_perfect:"Тамаша!",rate_great:"Өте жақсы",rate_decent:"Жаман емес",rate_low:"Жақсартуды қажет етеді",
+fb_dough:"{d} см-ге дейін созылды (мақсат — 30 см)",fb_prep:"Тіліктердің орташа дәлдігі: {p}%",fb_grill:"1-жағы {a}% кезінде, 2-жағы {b}% кезінде алынды (идеал ≈ 65%)",
+fb_assembly:"{n} қабаттың {c}-і дұрыс орында",fb_oven:"{a}% пісу кезінде алынды (идеал ≈ 68%)",fb_ovenBurnt:"Күйіп кетті — қыртыс көмірге айналды!",
+resTitle:"Асүйдегі нәтижелер",accuracy:"Дәлдік",passLine:"Өту шегі: 60%-дан жоғары",passed:"Өтті!",failed:"Шектен төмен",
+ptsEarned:"+{p} адалдық ұпайы",noPts:"Бұл жолы ұпай жоқ — келесіде 60%-дан жоғарыға ұмтылыңыз.",duelWin:"Дуэльде жеңдіңіз!",duelLose:"Бұл жолы {name} жеңді.",duelDraw:"Тең ойын!",
+youVs:"Сіз {a}% · {name} {b}%",doubleBonus:"Қонақты жеңгені үшін қос сыйлық ×2",duelNoPts:"Ұпайды тек жеңімпаз алады — тең ойында әдеттегі ұпай беріледі.",
+backToRestaurant:"Залға оралу",quitTitle:"Асүйден шығасыз ба?",quitTextSingle:"Тапсырысыңыз бәрібір ұсынылады, бірақ адалдық ұпайларынан айырыласыз.",
+quitTextDuel:"Шығу жеңілу болып саналады, ұпай берілмейді.",keepCooking:"Әрі қарай пісіру",quitYes:"Асүйден шығу",
+tabHome:"Мәзір",homeTitle:"Дастарханға қош келдіңіз",homeSub:"Не істегіңіз келеді?",homeFood:"Тағам тапсырыс беру",homeFoodSub:"Тағам таңдаңыз, QR арқылы төлеңіз, ойын ойнаңыз",homeFloor:"Үстелге отыру",homeFloorSub:"Бос үстел немесе біреуге қосылу",homeInbox:"Хабарламалар",homeInboxSub:"Шақырулар мен даяшы хабарлары",
+gMemo:"Осы ингредиенттерді есте сақтаңыз!",gPick:"Көрген ингредиенттерді басыңыз ({c}/{n})",gDone:"Дайын",gMiss:"Қателер",gMoves:"Қадамдар",gFound:"Жұптар",gRound:"{i}-раунд, барлығы {n}",gSeqWatch:"Бақылаңыз…",gSeqGo:"Сіздің кезегіңіз!",gStop:"Тоқта!",gTaps:"Басулар",gTime:"Уақыт",gTapGo:"Тезірек басыңыз!",fb_stack:"Жиналды, қате саны: {m}",fb_memory:"{n} ингредиенттің {c}-ін есте сақтадыңыз",fb_pairs:"Барлық жұп {m} қадамда табылды",fb_seq:"{n} қадамның {c}-і дұрыс қайталанды",fb_gauge:"Уақыт бойынша орташа дәлдік: {a}%",fb_tap:"Басу саны: {n}"
+}
+};
+/*I18N-END*/
+
+/* ============ data ============ */
+const MENU=[
+ {id:'margherita',cat:'pizza',emoji:'🍕',price:3900,n:['Margherita','Маргарита','Маргарита'],d:['San Marzano tomatoes, mozzarella, basil, olive oil','Томаты сан-марцано, моцарелла, базилик, оливковое масло','Сан-марцано қызанағы, моцарелла, базилик, зәйтүн майы']},
+ {id:'pepperoni',cat:'pizza',emoji:'🍕',price:4600,n:['Pepperoni','Пепперони','Пепперони'],d:['Spicy pepperoni, mozzarella, tomato sauce','Острая пепперони, моцарелла, томатный соус','Ащы пепперони, моцарелла, қызанақ тұздығы']},
+ {id:'burger',cat:'grill',emoji:'🍔',price:4200,n:['Beef Burger','Бургер с говядиной','Сиыр етінен бургер'],d:['Grilled beef patty, cheddar, pickles, house sauce','Говяжья котлета на гриле, чеддер, маринованные огурцы, фирменный соус','Грильдегі сиыр еті котлеті, чеддер, тұздалған қияр, үй тұздығы']},
+ {id:'ribeye',cat:'grill',emoji:'🥩',price:11900,n:['Ribeye Steak','Стейк Рибай','Рибай стейкі'],d:['300 g marbled ribeye, grilled vegetables, pepper sauce','Мраморный рибай 300 г, овощи гриль, перечный соус','300 г мәрмәр рибай, гриль көкөністері, бұрыш тұздығы']},
+ {id:'caesar',cat:'starters',emoji:'🥗',price:3200,n:['Caesar Salad','Салат Цезарь','Цезарь салаты'],d:['Romaine, grilled chicken, parmesan, croutons','Ромен, курица гриль, пармезан, гренки','Ромэн, грильдегі тауық еті, пармезан, кептірілген нан']},
+ {id:'baursak',cat:'starters',emoji:'🍞',price:1400,n:['Baursaks','Баурсаки','Бауырсақ'],d:['Warm golden fried dough puffs with honey','Тёплые золотистые баурсаки с мёдом','Балмен берілетін ыстық алтындай бауырсақ']},
+ {id:'beshbarmak',cat:'national',emoji:'🍲',price:5500,n:['Beshbarmak','Бешбармак','Бешбармақ'],d:['Boiled beef with hand-cut noodles and onion broth','Отварная говядина с домашней лапшой и луковым бульоном','Қолмен кесілген кеспемен қайнатылған сиыр еті және пияз сорпасы']},
+ {id:'lagman',cat:'national',emoji:'🍜',price:3600,n:['Lagman','Лагман','Лағман'],d:['Hand-pulled noodles, beef, peppers, aromatic broth','Тянутая лапша, говядина, перец, ароматный бульон','Созылған кеспе, сиыр еті, бұрыш, хош иісті сорпа']},
+ {id:'manti',cat:'national',emoji:'🥟',price:3800,n:['Manti','Манты','Мәнті'],d:['Steamed dumplings with spiced lamb and pumpkin','Паровые манты с бараниной и тыквой','Қой еті мен асқабақ салынған буға пісірілген мәнті']},
+ {id:'tiramisu',cat:'dessert',emoji:'🍰',price:2600,n:['Tiramisu','Тирамису','Тирамису'],d:['Mascarpone cream, espresso-soaked sponge, cocoa','Крем маскарпоне, бисквит с эспрессо, какао','Маскарпоне кремі, эспрессоға малынған бисквит, какао']},
+ {id:'lemonade',cat:'drinks',emoji:'🍋',price:1500,n:['Homemade Lemonade','Домашний лимонад','Үйде жасалған лимонад'],d:['Fresh lemon, mint, and a hint of ginger','Свежий лимон, мята и немного имбиря','Жаңа лимон, жалбыз және аздап зімбір']},
+ {id:'tea',cat:'drinks',emoji:'🍵',price:900,n:['Black Tea with Milk','Чай с молоком','Сүтті шай'],d:['Strong black tea served the Kazakh way, with milk','Крепкий чёрный чай с молоком по-казахски','Қазақша сүтпен берілетін қою қара шай']}
+];
+const MENU_BY_ID={};MENU.forEach(m=>{MENU_BY_ID[m.id]=m;});
+const CATS=['all','pizza','grill','starters','national','dessert','drinks'];
+const NAMES=[['Aigerim','Айгерим','Айгерім'],['Nurlan','Нурлан','Нұрлан'],['Dana','Дана','Дана'],['Timur','Тимур','Темір'],['Alina','Алина','Алина'],['Askar','Аскар','Асқар'],['Madina','Мадина','Мәдина'],['Daniyar','Данияр','Дәнияр'],['Sofia','София','София'],['Ruslan','Руслан','Руслан'],['Aruzhan','Аружан','Аружан'],['Yerlan','Ерлан','Ерлан'],['Kamila','Камила','Камила'],['Marat','Марат','Марат'],['Lena','Лена','Лена'],['Alex','Алекс','Алекс'],['Zhanna','Жанна','Жанна'],['Bakhyt','Бахыт','Бақыт'],['Elena','Елена','Елена'],['Sanzhar','Санжар','Санжар'],['Amina','Амина','Амина'],['Dias','Диас','Диас'],['Olga','Ольга','Ольга'],['Arman','Арман','Арман'],['Aliya','Алия','Әлия'],['Kirill','Кирилл','Кирилл'],['Saule','Сауле','Сәуле'],['Nikita','Никита','Никита'],['Gulnara','Гульнара','Гүлнәра'],['Ivan','Иван','Иван']];
+const AVATARS=['👩','👨','🧑','👵','👴','👧','👦','🧔','👱‍♀️','👱‍♂️','👩‍🦰','👨‍🦱','👩‍🦳','🧑‍🦰'];
+
+/* ============ state ============ */
+const S={
+  lang:'en',tab:'home',dnd:false,pace:'calm',
+  user:{table:null,status:'open',avatar:'😎'},
+  points:300,tables:[],cart:{},filter:'all',usePoints:false,
+  inbox:[],orders:[],orderSeq:1,modal:null,nextId:1,
+  lastIncomingAt:0,nextInviteAt:0,nextLifeAt:0,
+  pay:{phase:'idle',expiresAt:0,seed:1,expired:false}
+};
+let G=null;
+let lastModalSig='';
+
+function load(){try{const d=JSON.parse(localStorage.getItem('Match&Flavor-v1')||'{}');if(LANGS.indexOf(d.lang)>=0)S.lang=d.lang;if(typeof d.points==='number'&&isFinite(d.points))S.points=clamp(Math.round(d.points),0,10000000);}catch(e){}}
+function save(){try{localStorage.setItem('Match&Flavor-v1',JSON.stringify({lang:S.lang,points:S.points}));}catch(e){}}
+
+function t(k,p){
+  let s=I18N[S.lang]&&I18N[S.lang][k];
+  if(s==null)s=I18N.en[k];
+  if(s==null)return k;
+  if(p)s=s.replace(/\{(\w+)\}/g,(m,n)=>p[n]!=null?p[n]:m);
+  return s;
+}
+const li=()=>LIDX[S.lang];
+function gname(g){return NAMES[g.base][li()]+(g.suffix||'');}
+
+/* ============ guests & tables ============ */
+function newGuest(mode){
+  const used=new Set();S.tables.forEach(tb=>tb.guests.forEach(g=>used.add(g.base)));
+  const pool=NAMES.map((_,i)=>i).filter(i=>!used.has(i));
+  let idx,suffix='';
+  if(pool.length)idx=pick(pool);else{idx=rint(0,NAMES.length-1);suffix=' '+String.fromCharCode(65+rint(0,25))+'.';}
+  return {id:'g'+(S.nextId++),base:idx,suffix,avatar:pick(AVATARS),mode};
+}
+function seatGroup(tb){
+  tb.mode=Math.random()<0.55?'open':'private';
+  tb.guests=[];
+  const size=pick([1,2,2,3,3,4,4]);
+  for(let i=0;i<size;i++)tb.guests.push(newGuest(tb.mode));
+}
+function initTables(){
+  S.tables=[];
+  for(let n=1;n<=20;n++)S.tables.push({n,mode:'open',guests:[]});
+  shuffle(S.tables.map(x=>x.n)).slice(0,12).forEach(n=>seatGroup(S.tables[n-1]));
+}
+function tableState(tb){
+  if(S.user.table===tb.n)return S.user.status;
+  if(!tb.guests.length)return 'empty';
+  return tb.mode;
+}
+function stateLabel(st){return st==='open'?t('legendOpen'):st==='private'?t('legendPrivate'):t('legendEmpty');}
+function leaveBlockedNow(){return S.orders.some(o=>o.status!=='served');}
+
+function lifecycle(){
+  const now=Date.now();
+  if(now<S.nextLifeAt)return;
+  S.nextLifeAt=now+rint(18000,35000);
+  const occ=S.tables.filter(x=>x.guests.length);
+  const free=S.tables.filter(x=>!x.guests.length&&x.n!==S.user.table);
+  let fill;
+  if(occ.length<=8)fill=true;else if(occ.length>=15||!free.length)fill=false;else fill=Math.random()<0.5;
+  if(fill){if(!free.length)return;seatGroup(pick(free));}
+  else{if(!occ.length)return;pick(occ).guests=[];}
+  render();
+}
+
+/* ============ pace ============ */
+function gapRange(){return S.pace==='quick'?[8000,14000]:[30000,60000];}
+function paceMs(kind){
+  const q=S.pace==='quick';
+  if(kind==='reply')return q?rint(4000,7000):rint(15000,30000);
+  return q?rint(5000,8000):rint(20000,30000);
+}
+
+/* ============ messages ============ */
+function toast(msg){
+  const root=$('#toast-root');
+  const el=document.createElement('div');
+  el.className='toast';el.textContent=msg;
+  root.appendChild(el);
+  while(root.children.length>4)root.removeChild(root.firstChild);
+  setTimeout(()=>{el.classList.add('out');setTimeout(()=>{if(el.parentNode)el.parentNode.removeChild(el);},320);},5200);
+}
+function deliver(m,silent){
+  m.id='m'+(S.nextId++);m.ts=Date.now();m.read=(S.tab==='inbox');
+  S.inbox.unshift(m);if(S.inbox.length>60)S.inbox.pop();
+  if(m.type==='duel'||m.type==='social'||m.type==='reply')S.lastIncomingAt=m.ts;
+  if(!silent){
+    if(m.type==='duel')toast(t('tNewDuel',{n:m.from.table}));
+    else if(m.type==='social')toast(t('tNewMsg',{n:m.from.table}));
+    else if(m.type==='reply')toast(t('tReply',{name:gname(m.from)}));
+    else if(m.type==='waiter')toast(t(m.textKey,{n:m.table}));
+  }
+  render();
+}
+function effStatus(m){
+  if((m.type==='duel'||m.type==='reply')&&m.status==='pending'&&Date.now()>m.expiresAt)return 'expired';
+  return m.status;
+}
+function expireMsgs(){
+  let ch=false;
+  S.inbox.forEach(m=>{if((m.type==='duel'||m.type==='reply')&&m.status==='pending'&&Date.now()>m.expiresAt){m.status='expired';ch=true;}});
+  if(ch)render();
+}
+function maybeInvite(){
+  const now=Date.now();
+  if(now<S.nextInviteAt)return;
+  const gap=gapRange();
+  S.nextInviteAt=now+rint(gap[0],gap[1]);
+  if(S.dnd||S.user.status!=='open'||G||S.modal)return;
+  if(now-S.lastIncomingAt<gap[0]){S.nextInviteAt=Math.max(S.nextInviteAt,S.lastIncomingAt+gap[0]);return;}
+  const pend=S.inbox.filter(m=>(m.type==='duel'||m.type==='social')&&effStatus(m)==='pending').length;
+  if(pend>=3)return;
+  const cands=[];
+  S.tables.forEach(tb=>{if(tb.n!==S.user.table&&tb.mode==='open')tb.guests.forEach(g=>cands.push({g,tb}));});
+  if(!cands.length)return;
+  const c=pick(cands);
+  const from={base:c.g.base,suffix:c.g.suffix,avatar:c.g.avatar,table:c.tb.n};
+  if(Math.random()<0.5)deliver({type:'duel',from,status:'pending',expiresAt:now+180000});
+  else deliver({type:'social',textKey:pick(['s1','s2','s3','s4']),from,status:'pending'});
+}
+function sendChallenge(gid){
+  let tb=null,g=null;
+  S.tables.forEach(x=>x.guests.forEach(y=>{if(y.id===gid){tb=x;g=y;}}));
+  if(!g){render();return;}
+  if(G){toast(t('finishGameFirst'));return;}
+  if(S.user.table==null){toast(t('needSeat'));return;}
+  if(g.mode!=='open')return;
+  if(S.inbox.some(m=>m.type==='out'&&m.status==='pending')){toast(t('pendingChallenge'));return;}
+  const out={type:'out',kind:'duel',guestId:gid,to:{base:g.base,suffix:g.suffix,avatar:g.avatar,table:tb.n},fromTable:S.user.table,status:'pending'};
+  S.modal=null;
+  deliver(out,true);
+  toast(t('tChallengeSent',{n:tb.n}));
+  setTimeout(()=>resolveChallenge(out),paceMs('reply'));
+}
+function sendJoin(gid){
+  let tb=null,g=null;
+  S.tables.forEach(x=>x.guests.forEach(y=>{if(y.id===gid){tb=x;g=y;}}));
+  if(!g){render();return;}
+  if(G){toast(t('finishGameFirst'));return;}
+  if(S.user.table!=null){toast(t('alreadySeated',{n:S.user.table}));return;}
+  if(g.mode!=='open')return;
+  if(tb.guests.length>=4){toast(t('tableFull'));return;}
+  if(S.inbox.some(m=>m.type==='out'&&m.status==='pending')){toast(t('pendingChallenge'));return;}
+  const out={type:'out',kind:'join',guestId:gid,to:{base:g.base,suffix:g.suffix,avatar:g.avatar,table:tb.n},fromTable:null,status:'pending'};
+  S.modal=null;
+  deliver(out,true);
+  toast(t('tJoinSent',{n:tb.n}));
+  setTimeout(()=>resolveJoin(out),paceMs('reply'));
+}
+function resolveJoin(out){
+  if(out.status!=='pending')return;
+  if(S.dnd){setTimeout(()=>resolveJoin(out),4000);return;}
+  let g=null;
+  S.tables.forEach(x=>x.guests.forEach(y=>{if(y.id===out.guestId)g=y;}));
+  const from={base:out.to.base,suffix:out.to.suffix,avatar:out.to.avatar,table:out.to.table};
+  if(!g){
+    out.status='left';
+    deliver({type:'reply',kind:'join',from,result:'left',status:'info'});
+    return;
+  }
+  if(Math.random()>=0.65){
+    out.status='declined';
+    deliver({type:'reply',kind:'join',from,result:'declined',status:'info'});
+    return;
+  }
+  const tb=S.tables[out.to.table-1];
+  if(S.user.table!=null||tb.guests.length>=4||tb.mode!=='open'){
+    out.status='expired';
+    deliver({type:'reply',kind:'join',from,result:'noroom',status:'info'});
+    return;
+  }
+  out.status='accepted';
+  S.user.table=tb.n;
+  deliver({type:'reply',kind:'join',from,result:'accepted',status:'info'});
+  toast(t('tJoined',{n:tb.n}));
+  if(cartLines().length&&!G&&!S.modal)openCheckout();
+}
+function resolveChallenge(out){
+  if(out.status!=='pending')return;
+  if(S.dnd){setTimeout(()=>resolveChallenge(out),4000);return;}
+  let g=null;
+  S.tables.forEach(x=>x.guests.forEach(y=>{if(y.id===out.guestId)g=y;}));
+  const from={base:out.to.base,suffix:out.to.suffix,avatar:out.to.avatar,table:out.to.table};
+  if(!g){
+    out.status='left';
+    deliver({type:'reply',from,result:'left',status:'info'});
+    return;
+  }
+  const ok=Math.random()<0.7;
+  out.status=ok?'accepted':'declined';
+  deliver({type:'reply',from,result:ok?'accepted':'declined',status:ok?'pending':'info',expiresAt:Date.now()+180000});
+}
+
+/* ============ orders / waiter ============ */
+function startPipeline(orderId){
+  const o=S.orders.find(x=>x.id===orderId);
+  if(!o||o.pipe)return;
+  o.pipe=true;o.status='bringing';
+  deliver({type:'waiter',textKey:'waiter1',table:o.table},S.dnd);
+  setTimeout(()=>{
+    o.status='served';
+    deliver({type:'waiter',textKey:'waiter2',table:o.table},S.dnd);
+  },paceMs('waiter'));
+}
+
+/* ============ cart ============ */
+function cartLines(){
+  return Object.keys(S.cart).filter(id=>S.cart[id]>0&&MENU_BY_ID[id]).map(id=>({item:MENU_BY_ID[id],qty:S.cart[id]}));
+}
+function subtotal(){return cartLines().reduce((a,l)=>a+l.item.price*l.qty,0);}
+function redeem(){return S.usePoints?Math.min(S.points,Math.floor(subtotal()*0.3)):0;}
+
+/* ============ rendering: header / seatbar ============ */
+function renderHeader(){
+  const unread=S.inbox.filter(m=>!m.read).length;
+  const cc=Object.keys(S.cart).reduce((a,k)=>a+S.cart[k],0);
+  const tabs=[['home','tabHome',0],['menu','tabMenu',cc],['floor','tabFloor',0],['inbox','tabInbox',unread]];
+  $('#hdr').innerHTML=`<div class="hdr-in">
+   <div class="brand"><span class="brand-mark" aria-hidden="true">Д</span><div><b>Match&Flavor</b><small>${t('tagline')}</small></div></div>
+   <nav class="tabs" role="tablist">${tabs.map(x=>`<button class="tab" role="tab" aria-selected="${S.tab===x[0]}" data-action="tab" data-v="${x[0]}">${t(x[1])}${x[2]?`<span class="badge">${x[2]}</span>`:''}</button>`).join('')}</nav>
+   <div class="hdr-r">
+    <div class="langs" role="group" aria-label="Language">${LANGS.map(l=>`<button data-action="lang" data-v="${l}" aria-pressed="${S.lang===l}">${l.toUpperCase()}</button>`).join('')}</div>
+    <div class="ptschip" title="${esc(t('balanceLine',{p:S.points}))}"><i aria-hidden="true">★</i>${S.points} ${t('pts')}</div>
+   </div></div>`;
+  const me=S.user,blocked=leaveBlockedNow();
+  const info=me.table==null
+   ?`<div class="seat-info"><span class="dotwalk" aria-hidden="true"></span><p>${t('walking')}</p></div>`
+   :`<div class="seat-info"><span class="dot ${me.status}" aria-hidden="true"></span><b>${t('seatedAt',{n:me.table})}</b><button class="btn btn-sm" data-action="leave"${blocked?' aria-disabled="true"':''}>${t('leave')}</button>${blocked?`<span class="warn">${t('leaveBlocked')}</span>`:''}</div>`;
+  $('#seatbar').innerHTML=`<div class="seatbar-in">${info}<div class="seat-ctrl">
+    <div class="seg" role="group"><button data-action="setStatus" data-v="open" aria-pressed="${me.status==='open'}"><span class="dot open"></span>${t('statusOpen')}</button><button data-action="setStatus" data-v="private" aria-pressed="${me.status==='private'}"><span class="dot private"></span>${t('statusPrivate')}</button></div>
+    <button class="switch" role="switch" aria-checked="${S.dnd}" data-action="toggleDnd"><span class="trk"></span>${t('dnd')}</button>
+   </div></div>${S.dnd?`<p class="dndnote">${t('dndHint')}</p>`:''}`;
+}
+
+/* ============ views ============ */
+function floorView(){
+  const legend=`<ul class="legend"><li><i class="sw empty"></i>${t('legendEmpty')}</li><li><i class="sw open"></i>${t('legendOpen')}</li><li><i class="sw private"></i>${t('legendPrivate')}</li><li><i class="sw you"></i>${t('legendYou')}</li></ul>`;
+  const banner=(S.user.table==null&&cartLines().length)?`<p class="sitbanner">${t('sitBanner')}</p>`:'';
+  const tables=S.tables.map(tb=>{
+    const st=tableState(tb),mine=S.user.table===tb.n;
+    const occ=tb.guests.map(g=>({a:g.avatar,me:false}));
+    if(mine)occ.push({a:S.user.avatar,me:true});
+    const count=occ.length;
+    let seats='';
+    for(let i=0;i<4;i++){
+      if(occ[i])seats+=`<span class="seat s${i} ${occ[i].me?'me':'on'}">${occ[i].a}</span>`;
+      else seats+=`<span class="seat s${i} off"></span>`;
+    }
+    const label=`${t('tableN',{n:tb.n})}, ${t('seatsCount',{c:count})}, ${stateLabel(st)}${mine?', '+t('legendYou'):''}`;
+    return `<button class="tbl st-${st}${mine?' mine':''}" data-action="openTable" data-n="${tb.n}" aria-label="${esc(label)}"><span class="stage">${seats}<span class="disc ${st}">${tb.n}</span>${mine?`<span class="youtag">${t('legendYou')}</span>`:''}</span><span class="cap">${t('seatsCount',{c:count})}</span></button>`;
+  }).join('');
+  return `<section><div class="view-head"><div><h1>${t('floorTitle')}</h1><p class="sub">${t('floorSub')}</p></div>${legend}</div>${banner}
+   <div class="room"><span class="room-label top">${t('kitchen')}</span><div class="floor">${tables}</div><span class="room-label bottom">${t('entrance')}</span></div></section>`;
+}
+function dishCard(it){
+  const q=S.cart[it.id]||0,nm=it.n[li()];
+  const ctrl=q>0
+   ?`<div class="stepper"><button data-action="dec" data-id="${it.id}" aria-label="${esc(t('qtyDec'))}">−</button><span>${q}</span><button data-action="inc" data-id="${it.id}" aria-label="${esc(t('qtyInc'))}">+</button></div>`
+   :`<button class="btn btn-primary btn-sm" data-action="inc" data-id="${it.id}">${t('add')}</button>`;
+  return `<article class="dish"><div class="dish-art" aria-hidden="true">${it.emoji}</div><div class="dish-body"><h3>${esc(nm)}</h3><p>${esc(it.d[li()])}</p></div><div class="dish-foot"><b class="price">${fmt(it.price)}</b>${ctrl}</div></article>`;
+}
+function cartPanel(){
+  const lines=cartLines(),sub=subtotal(),red=redeem(),total=sub-red;
+  let body;
+  if(!lines.length)body=`<p class="empty">${t('cartEmpty')}</p>`;
+  else{
+    body=lines.map(l=>`<div class="cartline"><div class="nm">${esc(l.item.n[li()])}<small>${fmt(l.item.price)}</small></div><div class="stepper"><button data-action="dec" data-id="${l.item.id}" aria-label="${esc(t('qtyDec'))}">−</button><span>${l.qty}</span><button data-action="inc" data-id="${l.item.id}" aria-label="${esc(t('qtyInc'))}">+</button></div><b>${fmt(l.item.price*l.qty)}</b></div>`).join('');
+    body+=`<label class="check"><input type="checkbox" data-action="togglePoints" data-id="pts"${S.usePoints?' checked':''}${S.points<1?' disabled':''}><span>${t('usePoints')}<br><small class="hint">${t('balanceLine',{p:S.points})}</small></span></label>
+     <div class="rows"><div class="row"><span>${t('subtotal')}</span><span>${fmt(sub)}</span></div>${red>0?`<div class="row"><span>${t('pointsDiscount')}</span><span>−${fmt(red)}</span></div>`:''}<div class="row tot"><span>${t('total')}</span><span>${fmt(total)}</span></div></div>`;
+    if(S.user.table==null)body+=`<p class="hint" style="margin-bottom:10px">${t('seatNeededCart')}</p><button class="btn btn-primary btn-lg" style="width:100%" data-action="goFloor">${t('chooseTable')}</button>`;
+    else body+=`<p class="hint" style="margin-bottom:10px">${t('deliveredToTable',{n:S.user.table})}</p><button class="btn btn-primary btn-lg" style="width:100%" data-action="checkout">${t('payQr')} — ${fmt(total)}</button>`;
+  }
+  const ords=S.orders.slice(-3).reverse().map(o=>`<li><span>${t('orderN',{n:o.id})} · ${t('tableN',{n:o.table})}</span><span class="tag ${o.status==='served'?'ok':'warn'}">${t('os_'+o.status)}</span></li>`).join('');
+  return `<aside class="panel sticky" id="cart"><h2>${t('cartTitle')}</h2>${body}${ords?`<h3 style="font-size:16px;margin-top:18px">${t('ordersTitle')}</h3><ul class="ordl">${ords}</ul>`:''}</aside>`;
+}
+function menuView(){
+  const items=MENU.filter(m=>S.filter==='all'||m.cat===S.filter);
+  const cc=Object.keys(S.cart).reduce((a,k)=>a+S.cart[k],0);
+  const bar=cc?`<button class="cartbar" data-action="toCart">🛒 ${t('cartTitle')} · ${cc} · ${fmt(subtotal())}</button>`:'';
+  return `<section><div class="view-head"><div><h1>${t('menuTitle')}</h1><p class="sub">${t('menuSub')}</p></div></div>
+   <div class="menu-layout"><div><div class="chips" role="group">${CATS.map(c=>`<button class="chip" data-action="filter" data-v="${c}" aria-pressed="${S.filter===c}">${t('cat_'+c)}</button>`).join('')}</div>
+   <div class="dishes">${items.map(dishCard).join('')}</div></div>${cartPanel()}</div></section>${bar}`;
+}
+function msgView(m){
+  const eff=effStatus(m);
+  let avatar,who,tbl,text,chip='',acts='';
+  const tm=new Date(m.ts).toLocaleTimeString(S.lang==='en'?'en-GB':'ru-RU',{hour:'2-digit',minute:'2-digit'});
+  if(m.type==='waiter'){avatar='🛎️';who=t('waiter');tbl=m.table;text=t(m.textKey,{n:m.table});}
+  else if(m.type==='duel'){
+    avatar=m.from.avatar;who=gname(m.from);tbl=m.from.table;text=t('duelInvite',{n:m.from.table});
+    if(eff==='pending')acts=`<button class="btn btn-primary" data-action="accDuel" data-id="${m.id}">${t('accept')}</button><button class="btn" data-action="decMsg" data-id="${m.id}">${t('decline')}</button>`;
+    else chip=`<span class="tag ${eff==='accepted'?'ok':'bad'}">${t('ms_'+eff)}</span>`;
+  }else if(m.type==='social'){
+    avatar=m.from.avatar;who=gname(m.from);tbl=m.from.table;text=t(m.textKey,{n:m.from.table});
+    if(eff==='pending')acts=`<button class="btn btn-primary" data-action="accSocial" data-id="${m.id}">${t('accept')}</button><button class="btn" data-action="decMsg" data-id="${m.id}">${t('decline')}</button>`;
+    else chip=`<span class="tag ${eff==='accepted'?'ok':'bad'}">${t('ms_'+eff)}</span>`;
+  }else if(m.type==='out'){
+    avatar=m.to.avatar;who=gname(m.to);tbl=m.to.table;text=m.kind==='join'?t('joinOut',{n:tbl}):t('duelInvite',{n:m.fromTable});
+    chip=`<span class="tag ${m.status==='pending'?'warn':m.status==='accepted'?'ok':'bad'}">${t('ms_'+m.status)}</span>`;
+  }else{
+    avatar=m.from.avatar;who=gname(m.from);tbl=m.from.table;text=t((m.kind==='join'?'jreply_':'reply_')+m.result,{name:gname(m.from)});
+    if(m.kind==='join'){if(m.result==='accepted')chip=`<span class="tag ok">${t('ms_accepted')}</span>`;}
+    else if(m.result==='accepted'&&eff==='pending')acts=`<button class="btn btn-green" data-action="startReply" data-id="${m.id}">${t('startDuel')}</button>`;
+    else if(m.result==='accepted')chip=`<span class="tag ${eff==='started'?'ok':'bad'}">${t('ms_'+eff)}</span>`;
+  }
+  const sub=m.type==='out'?`<small>${t('deliveredTo',{n:tbl})}</small>`:`<small>${t('tableN',{n:tbl})}</small>`;
+  return `<article class="msg${m.read?'':' unread'}"><div class="avatar" aria-hidden="true">${avatar}</div><div class="msg-top"><b>${esc(who)}</b>${sub}<small>${tm}</small>${chip}</div><p class="msg-txt">${esc(text)}</p>${acts?`<div class="msg-act">${acts}</div>`:''}</article>`;
+}
+function inboxView(){
+  return `<section><div class="view-head"><div><h1>${t('inboxTitle')}</h1><p class="sub">${t('inboxSub')}</p></div>
+   <div class="paceRow"><span class="lbl hint">${t('paceLabel')}</span><div class="seg" role="group"><button data-action="pace" data-v="calm" aria-pressed="${S.pace==='calm'}">${t('paceCalm')}</button><button data-action="pace" data-v="quick" aria-pressed="${S.pace==='quick'}">${t('paceQuick')}</button></div></div></div>
+   <div class="msgs">${S.inbox.length?S.inbox.map(msgView).join(''):`<p class="empty">${t('inboxEmpty')}</p>`}</div></section>`;
+}
+function homeView(){
+  const cc=Object.keys(S.cart).reduce((a,k)=>a+S.cart[k],0),unread=S.inbox.filter(m=>!m.read).length;
+  const card=(tab,e,k,badge)=>`<button class="hcard" data-action="tab" data-v="${tab}"><span class="he" aria-hidden="true">${e}</span><span class="ht"><b>${t('home'+k)}</b><small>${t('home'+k+'Sub')}</small></span>${badge?`<span class="badge">${badge}</span>`:''}</button>`;
+  return `<section><div class="view-head"><div><h1>${t('homeTitle')}</h1><p class="sub">${t('homeSub')}</p></div></div><div class="hgrid">${card('menu','🍽️','Food',cc)}${card('floor','🪑','Floor',0)}${card('inbox','💬','Inbox',unread)}</div></section>`;
+}
+function renderMain(){
+  $('#main').innerHTML=S.tab==='home'?homeView():S.tab==='floor'?floorView():S.tab==='menu'?menuView():inboxView();
+}
+
+/* ============ modals ============ */
+function tableModal(){
+  const n=S.modal.n,tb=S.tables[n-1],mine=S.user.table===n;
+  if(mine){
+    const blocked=leaveBlockedNow();
+    return `<h2 id="dlg-t">${t('youHereTitle')} — ${t('tableN',{n})}</h2><p>${t('youHereText',{status:stateLabel(S.user.status)})}</p>${blocked?`<p class="hint" style="margin-top:8px">${t('leaveBlocked')}</p>`:''}
+     <div class="acts"><button class="btn" data-action="closeModal">${t('close')}</button><button class="btn btn-primary" data-action="leave" data-autofocus="1"${blocked?' aria-disabled="true"':''}>${t('leave')}</button></div>`;
+  }
+  if(!tb.guests.length){
+    if(S.user.table!=null)return `<h2 id="dlg-t">${t('tableN',{n})}</h2><p>${t('alreadySeated',{n:S.user.table})}</p><div class="acts"><button class="btn btn-primary" data-action="closeModal" data-autofocus="1">${t('close')}</button></div>`;
+    return `<h2 id="dlg-t">${t('sitTitle',{n})}</h2><p>${t('sitText',{status:stateLabel(S.user.status)})}</p>
+     <div class="acts"><button class="btn" data-action="closeModal">${t('cancel')}</button><button class="btn btn-primary" data-action="sit" data-n="${n}" data-autofocus="1">${t('sitBtn')}</button></div>`;
+  }
+  const pend=S.inbox.some(m=>m.type==='out'&&m.status==='pending');
+  const full=tb.guests.length>=4;
+  const list=tb.guests.map(g=>{
+    const open=g.mode==='open';
+    const act=open?`<div class="gacts"><button class="btn btn-primary btn-sm" data-action="challenge" data-gid="${g.id}"${pend?' aria-disabled="true"':''}>⚔️ ${t('challenge')}</button><button class="btn btn-sm" data-action="join" data-gid="${g.id}"${(pend||full||S.user.table!=null)?' aria-disabled="true"':''}>🪑 ${t('joinBtn')}</button></div>`:`<small>${t('privateGuest')}</small>`;
+    return `<li class="guest"><div class="avatar" aria-hidden="true">${g.avatar}</div><div><b>${esc(gname(g))}</b> <span class="pill"><span class="dot ${g.mode}"></span>${stateLabel(g.mode)}</span></div>${act}</li>`;
+  }).join('');
+  return `<h2 id="dlg-t">${t('guestsAt',{n})}</h2><p class="hint">${tb.mode==='open'?t('tableOpenNote'):t('tablePrivateNote')}</p>
+   ${S.user.table==null&&tb.mode==='open'?`<p class="hint" style="margin-top:6px">${t('needSeat')}</p>`:''}
+   <ul class="glist">${list}</ul><div class="acts"><button class="btn" data-action="closeModal" data-autofocus="1">${t('close')}</button></div>`;
+}
+function qrSvg(seed){
+  const N=25,r=rng(seed),m=[];
+  for(let y=0;y<N;y++){m.push([]);for(let x=0;x<N;x++)m[y].push(r()<0.48);}
+  function finder(ox,oy){for(let dy=0;dy<7;dy++)for(let dx=0;dx<7;dx++){const edge=dx===0||dx===6||dy===0||dy===6,core=dx>=2&&dx<=4&&dy>=2&&dy<=4;m[oy+dy][ox+dx]=edge||core;}}
+  finder(0,0);finder(N-7,0);finder(0,N-7);
+  for(let i=0;i<8;i++){
+    m[7][i]=false;m[i][7]=false;
+    m[7][N-8+i]=false;m[i][N-8]=false;
+    m[N-8][i]=false;m[N-8+i][7]=false;
+  }
+  let rects='';
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(m[y][x])rects+=`<rect x="${x}" y="${y}" width="1" height="1"/>`;
+  return `<svg class="qr" viewBox="-1 -1 27 27" shape-rendering="crispEdges" role="img" aria-label="QR"><rect x="-1" y="-1" width="27" height="27" fill="#fff"/><g fill="#1c1c1c">${rects}</g></svg>`;
+}
+function checkoutModal(){
+  const lines=cartLines(),sub=subtotal(),red=redeem(),total=sub-red,P=S.pay;
+  const head=`<div class="pay-head"><span class="pay-logo" aria-hidden="true">QR</span><div><b id="dlg-t">${t('payTitle')}</b><small>${t('merchant')}</small></div></div>`;
+  if(P.phase==='processing')return head+`<div class="center"><div class="spin" role="status"></div><p>${t('processing')}</p></div>`;
+  if(P.phase==='success')return head+`<div class="center"><div class="okmark" aria-hidden="true">✓</div><p><b>${t('tPaid')}</b></p><p class="hint">${t('paidOk')}</p></div>`;
+  const left=P.expiresAt-Date.now(),exp=P.expired||left<=0;
+  const rows=lines.map(l=>`<div class="row"><span>${esc(l.item.n[li()])} × ${l.qty}</span><span>${fmt(l.item.price*l.qty)}</span></div>`).join('');
+  return head+`<div class="rows">${rows}${red>0?`<div class="row"><span>${t('loyaltyUsed')}</span><span>−${fmt(red)}</span></div>`:''}<div class="row tot"><span>${t('total')}</span><span>${fmt(total)}</span></div></div>
+   <p class="hint">${t('deliveredToTable',{n:S.user.table})}</p>
+   <div class="qr-wrap${exp?' exp':''}">${qrSvg(P.seed)}${exp?`<div class="qr-over">${t('qrExpired')}</div>`:''}</div>
+   <p class="center hint">${t('payScan')}</p>
+   <p class="center" style="margin-top:6px">${exp?'':t('qrExpires',{t:`<b id="qr-timer">${mmss(left)}</b>`})}</p>
+   <p class="center hint" style="font-size:13px">${t('payDemo')}</p>
+   <div class="acts"><button class="btn" data-action="closeModal">${t('cancel')}</button>${exp?`<button class="btn btn-primary" data-action="refreshQr" data-autofocus="1">${t('refreshQr')}</button>`:`<button class="btn btn-primary" data-action="confirmPay" data-autofocus="1">${t('confirmPaid')}</button>`}</div>`;
+}
+function modalLocked(){return !!(S.modal&&S.modal.type==='checkout'&&(S.pay.phase==='processing'||S.pay.phase==='success'));}
+function renderModal(){
+  const root=$('#modal-root');
+  if(!S.modal){root.innerHTML='';lastModalSig='';return;}
+  const body=S.modal.type==='table'?tableModal():checkoutModal();
+  root.innerHTML=`<div class="backdrop" data-action="backdrop"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlg-t">${body}</div></div>`;
+  const sig=S.modal.type+(S.modal.n||'')+(S.modal.type==='checkout'?S.pay.seed+S.pay.phase+S.pay.expired:'')+(S.modal.type==='table'?(S.tables[S.modal.n-1].guests.length?'o':'e')+(S.user.table===S.modal.n?'m':''):'');
+  if(sig!==lastModalSig){
+    lastModalSig=sig;
+    const f=root.querySelector('[data-autofocus]')||root.querySelector('button');
+    if(f)f.focus({preventScroll:true});
+  }
+}
+
+/* ============ render ============ */
+function focusKey(){
+  const a=document.activeElement;
+  if(!a||!a.dataset||!a.dataset.action)return null;
+  return a.dataset.action+'|'+(a.dataset.id||a.dataset.n||a.dataset.v||a.dataset.gid||'');
+}
+function restoreFocus(k){
+  if(!k)return;
+  const els=document.querySelectorAll('[data-action]');
+  for(let i=0;i<els.length;i++){
+    const e=els[i];
+    if(e.dataset.action+'|'+(e.dataset.id||e.dataset.n||e.dataset.v||e.dataset.gid||'')===k){
+      if(e!==document.activeElement){try{e.focus({preventScroll:true});}catch(x){}}
+      return;
+    }
+  }
+}
+function render(){
+  const fk=(S.modal||G)?null:focusKey();
+  document.documentElement.lang=HLANG[S.lang];
+  document.title=t('docTitle');
+  renderHeader();renderMain();renderModal();
+  const app=$('#app');
+  try{app.inert=!!(S.modal||G);}catch(e){}
+  restoreFocus(fk);
+}
+
+/* ============ actions ============ */
+function doLeave(){
+  if(S.user.table==null)return;
+  if(leaveBlockedNow()){toast(t('leaveBlocked'));return;}
+  S.user.table=null;S.modal=null;
+  toast(t('tLeft'));render();
+}
+function sit(n){
+  const tb=S.tables[n-1];
+  if(S.user.table!=null||tb.guests.length){render();return;}
+  S.user.table=n;S.modal=null;
+  toast(t('tSat',{n}));render();
+  if(cartLines().length&&!G)openCheckout();
+}
+function openCheckout(){
+  if(!cartLines().length)return;
+  if(S.user.table==null){toast(t('seatNeededCart'));S.tab='floor';render();return;}
+  S.pay={phase:'idle',expiresAt:Date.now()+300000,seed:rint(1,999999),expired:false};
+  S.modal={type:'checkout'};render();
+}
+function confirmPay(){
+  if(S.pay.phase!=='idle')return;
+  if(S.pay.expired||Date.now()>S.pay.expiresAt){S.pay.expired=true;renderModal();return;}
+  const lines=cartLines();
+  if(!lines.length||S.user.table==null)return;
+  S.pay.phase='processing';renderModal();
+  setTimeout(()=>{
+    const ls=cartLines(),sub=subtotal(),red=redeem(),total=sub-red;
+    const top=ls.slice().sort((a,b)=>b.item.price-a.item.price)[0];
+    const o={id:S.orderSeq++,dish:top?top.item.id:null,table:S.user.table,lines:ls.map(l=>({id:l.item.id,qty:l.qty})),total,status:'cooking',pipe:false};
+    S.orders.push(o);S.points=Math.max(0,S.points-red);S.cart={};S.usePoints=false;save();
+    S.pay.phase='success';render();
+    setTimeout(()=>{S.modal=null;startGame({mode:'single',orderId:o.id,dish:o.dish});},900);
+  },1000);
+}
+function findMsg(id){return S.inbox.find(m=>m.id===id);}
+function nextInviteSoon(){const g=gapRange();S.nextInviteAt=Math.max(S.nextInviteAt,Date.now()+rint(g[0],g[1]));}
+
+const A={
+  tab(el){S.tab=el.dataset.v;if(S.tab==='inbox')S.inbox.forEach(m=>{m.read=true;});render();window.scrollTo(0,0);},
+  lang(el){S.lang=el.dataset.v;save();render();},
+  setStatus(el){if(S.user.status===el.dataset.v)return;S.user.status=el.dataset.v;toast(t('statusSet_'+S.user.status));if(S.user.status==='open')nextInviteSoon();render();},
+  toggleDnd(){S.dnd=!S.dnd;toast(t(S.dnd?'dndOn':'dndOff'));if(!S.dnd)nextInviteSoon();render();},
+  pace(el){S.pace=el.dataset.v;const g=gapRange();S.nextInviteAt=Date.now()+rint(g[0],g[1]);render();},
+  openTable(el){S.modal={type:'table',n:+el.dataset.n};render();},
+  closeModal(){if(modalLocked())return;S.modal=null;render();},
+  backdrop(el,e){if(e.target!==el||modalLocked())return;S.modal=null;render();},
+  sit(el){sit(+el.dataset.n);},
+  join(el){sendJoin(el.dataset.gid);},
+  leave(){doLeave();},
+  challenge(el){sendChallenge(el.dataset.gid);},
+  filter(el){S.filter=el.dataset.v;render();},
+  inc(el){S.cart[el.dataset.id]=(S.cart[el.dataset.id]||0)+1;render();},
+  dec(el){const id=el.dataset.id;S.cart[id]=Math.max(0,(S.cart[id]||0)-1);if(!S.cart[id])delete S.cart[id];render();},
+  togglePoints(){S.usePoints=!S.usePoints;render();},
+  toCart(){const c=document.getElementById('cart');if(c)c.scrollIntoView({behavior:'smooth',block:'start'});},
+  goFloor(){S.tab='floor';render();window.scrollTo(0,0);},
+  checkout(){openCheckout();},
+  refreshQr(){S.pay={phase:'idle',expiresAt:Date.now()+300000,seed:rint(1,999999),expired:false};renderModal();},
+  confirmPay(){confirmPay();},
+  accDuel(el){
+    const m=findMsg(el.dataset.id);
+    if(!m||m.type!=='duel'||m.status!=='pending')return;
+    if(effStatus(m)==='expired'){m.status='expired';render();return;}
+    if(G){toast(t('finishGameFirst'));return;}
+    m.status='accepted';startGame({mode:'duel',opp:m.from});
+  },
+  accSocial(el){
+    const m=findMsg(el.dataset.id);
+    if(!m||m.type!=='social'||m.status!=='pending')return;
+    m.status='accepted';toast(t('tReplySent',{n:m.from.table}));render();
+  },
+  decMsg(el){
+    const m=findMsg(el.dataset.id);
+    if(!m||m.status!=='pending')return;
+    m.status='declined';toast(t('tDeclined'));render();
+  },
+  startReply(el){
+    const m=findMsg(el.dataset.id);
+    if(!m||m.type!=='reply'||m.status!=='pending')return;
+    if(effStatus(m)==='expired'){m.status='expired';render();return;}
+    if(G){toast(t('finishGameFirst'));return;}
+    m.status='started';startGame({mode:'duel',opp:m.from});
+  },
+  gStart(){if(!G||G.phase!=='intro')return;G.phase='play';renderGame();},
+  gNext(){
+    if(!G||G.phase!=='result')return;
+    if(G.stage<G.rec.length-1){G.stage++;G.phase='intro';renderGame();}
+    else{finalizeGame();G.phase='final';renderGame();render();}
+  },
+  gBack(){closeGame(false);},
+  quitAsk(){if(!G)return;if(G.phase==='final'){closeGame(false);return;}G.paused=true;const q=$('#quit-layer');if(q){q.hidden=false;const b=q.querySelector('button');if(b)b.focus();}},
+  quitKeep(){if(!G)return;G.paused=false;const q=$('#quit-layer');if(q)q.hidden=true;},
+  quitYes(){closeGame(true);}
+};
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-action]');
+  if(!el||el.disabled)return;
+  const f=A[el.dataset.action];
+  if(f){try{f(el,e);}catch(err){console.error(err);}}
+});
+document.addEventListener('change',e=>{
+  const el=e.target;
+  if(el&&el.dataset&&el.dataset.action==='togglePoints'){A.togglePoints();}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return;
+  if(G){A.quitAsk();return;}
+  if(S.modal&&!modalLocked()){S.modal=null;render();}
+});
+
+/* ============ game ============ */
+const SD={dough:'🍞',prep:'🔪',grill:'🥩',assembly:'🍕',oven:'🔥',stack:'🥪',memory:'🧠',pairs:'🃏',seq:'🎵',gauge:'⏱️',tap:'🥤'};
+const T=(a,b,c)=>[a,b,c];
+const I=(e,a,b,c)=>({e,n:[a,b,c]});
+const DEF={
+ memory:{n:T('Memory test','Проверка памяти','Жад сынағы'),d:T('Memorize the ingredients shown for a few seconds, then pick them from the full list.','Запомните показанные ингредиенты за несколько секунд, а затем выберите их в общем списке.','Көрсетілген ингредиенттерді бірнеше секунд ішінде есте сақтап, толық тізімнен таңдаңыз.')},
+ pairs:{n:T('Find the pairs','Найди пары','Жұптарды тап'),d:T('Flip two cards at a time and match all the pairs in as few moves as you can.','Переворачивайте по две карточки и найдите все пары за минимум ходов.','Бір мезгілде екі карточка аударып, барлық жұпты ең аз қадаммен табыңыз.')},
+ seq:{n:T('Spice sequence','Порядок специй','Дәмдеуіш реті'),d:T('Watch which spice jars light up, then repeat the sequence. 3 rounds, each one longer.','Следите, какие баночки со специями загораются, и повторите порядок. 3 раунда, каждый длиннее.','Қай дәмдеуіш құтылары жанғанын бақылап, ретін қайталаңыз. 3 раунд, әрқайсысы ұзағырақ.')}
+};
+function sinfo(s){
+  const c=s.c||{},D=DEF[s.k]||{},nn=c.n||D.n,dd=c.d||D.d;
+  return {e:c.e||SD[s.k],title:nn?nn[li()]:t('st_'+s.k),intro:dd?dd[li()]:t('intro_'+s.k)};
+}
+const DEC1=[I('🍓','Strawberry','Клубника','Құлпынай'),I('🥕','Carrot','Морковь','Сәбіз'),I('🐟','Fish','Рыба','Балық'),I('🍌','Banana','Банан','Банан')];
+const DEC2=[I('🍇','Grapes','Виноград','Жүзім'),I('🥦','Broccoli','Брокколи','Брокколи'),I('🍄','Mushroom','Гриб','Саңырауқұлақ'),I('🌽','Corn','Кукуруза','Жүгері')];
+const PATTY=I('🥩','Beef patty','Котлета','Котлет'),CHEDDAR=I('🧀','Cheddar','Чеддер','Чеддер'),PICKLE=I('🥒','Pickles','Огурцы','Қияр'),BSAUCE=I('🥫','House sauce','Соус','Тұздық'),BUNB=I('🍞','Bottom bun','Нижняя булочка','Төменгі тоқаш'),BUNT=I('🍔','Top bun','Верхняя булочка','Жоғарғы тоқаш');
+const LEMON=I('🍋','Lemon','Лимон','Лимон'),MINT=I('🌿','Mint','Мята','Жалбыз'),GINGER=I('🫚','Ginger','Имбирь','Зімбір'),ICE=I('🧊','Ice','Лёд','Мұз'),SUGAR=I('🍬','Sugar','Сахар','Қант');
+const RECIPES={
+ margherita:[{k:'dough'},{k:'stack',c:{items:[I('🍅','Tomato sauce','Томатный соус','Қызанақ тұздығы'),I('🧀','Mozzarella','Моцарелла','Моцарелла'),I('🌿','Basil','Базилик','Базилик'),I('🫒','Olive oil','Оливковое масло','Зәйтүн майы')],e:'🍕',n:T('Top the pizza','Начинка пиццы','Пицца толтырмасы'),d:T('Build the Margherita: tomato sauce, mozzarella, basil, olive oil.','Соберите «Маргариту»: томатный соус, моцарелла, базилик, оливковое масло.','«Маргариталы» жинаңыз: қызанақ тұздығы, моцарелла, базилик, зәйтүн майы.')}},{k:'oven'}],
+ pepperoni:[{k:'dough'},{k:'prep'},{k:'grill'},{k:'assembly'},{k:'oven'}],
+ burger:[{k:'memory',c:{set:[BUNB,PATTY,CHEDDAR,PICKLE,BSAUCE],decoy:DEC1}},{k:'grill',c:{e:'🍔',n:T('Grill the patty','Обжарка котлеты','Котлетті қуыру'),d:T('Sear the patty. Flip it with the tongs when the meter is in the green zone, then take it off in the green zone on the second side. Do not burn it!','Обжарьте котлету. Переверните её щипцами, когда шкала в зелёной зоне, затем снимите в зелёной зоне со второй стороны. Не подгорите!','Котлетті қуырыңыз. Шкала жасыл аймақта болғанда қыспақпен аударып, екінші жағы жасыл аймақта грильден алыңыз. Күйдірмеңіз!')}},{k:'stack',c:{items:[BUNB,PATTY,CHEDDAR,PICKLE,BSAUCE,BUNT],e:'🍔',n:T('Stack the burger','Соберите бургер','Бургерді жинаңыз'),d:T('Stack from the bottom: bun, patty, cheddar, pickles, sauce, top bun.','Собирайте снизу: булочка, котлета, чеддер, огурцы, соус, верхняя булочка.','Төменнен жинаңыз: тоқаш, котлет, чеддер, қияр, тұздық, жоғарғы тоқаш.')}}],
+ ribeye:[{k:'memory',c:{set:[I('🥩','Ribeye','Рибай','Рибай'),I('🧄','Garlic','Чеснок','Сарымсақ'),I('🌿','Rosemary','Розмарин','Розмарин'),I('🧈','Butter','Масло','Сары май'),I('🧂','Salt','Соль','Тұз')],decoy:DEC2}},{k:'grill'},{k:'seq'}],
+ caesar:[{k:'prep',c:{items:[{k:'tomato',sp:0.5,n:T('Cherry tomato','Помидор черри','Черри қызанағы')},{k:'onion',sp:0.65,n:T('Red onion','Красный лук','Қызыл пияз')},{k:'pepperoni',sp:0.82,n:T('Grilled chicken','Курица гриль','Грильдегі тауық')}]}},{k:'pairs',c:{set:['🥬','🍅','🧀','🍗','🥖','🍋']}},{k:'stack',c:{items:[I('🥬','Romaine','Ромен','Ромэн'),I('🫙','Caesar dressing','Соус Цезарь','Цезарь тұздығы'),I('🍗','Chicken','Курица','Тауық'),I('🥖','Croutons','Гренки','Кептірілген нан'),I('🧀','Parmesan','Пармезан','Пармезан')],e:'🥗',n:T('Toss the salad','Сборка салата','Салатты жинау'),d:T('Build the Caesar: romaine, dressing, chicken, croutons, parmesan.','Соберите «Цезарь»: ромен, соус, курица, гренки, пармезан.','«Цезарьді» жинаңыз: ромэн, тұздық, тауық, нан, пармезан.')}}],
+ baursak:[{k:'dough'},{k:'gauge',c:{pot:'🥘',e:'🍳',n:T('Deep-fry','Жарка во фритюре','Қуыру'),d:T('Drop the dough in hot oil. Stop the needle in the green zone to lift each batch when golden. 3 batches.','Опустите тесто в горячее масло. Остановите стрелку в зелёной зоне, чтобы вынуть золотистую партию. 3 партии.','Қамырды ыстық майға салыңыз. Алтындай болғанда алу үшін тілді жасыл аймақта тоқтатыңыз. 3 партия.')}},{k:'pairs',c:{set:['🍞','🍯','🥛','🧂','🥚','🧈']}}],
+ beshbarmak:[{k:'gauge',c:{pot:'🍲',n:T('Boil the meat','Варка мяса','Етті қайнату'),d:T('Stop the needle in the green zone when the meat is tender. 3 checks.','Остановите стрелку в зелёной зоне, когда мясо готово. 3 проверки.','Ет піскен кезде тілді жасыл аймақта тоқтатыңыз. 3 тексеру.')}},{k:'seq'},{k:'stack',c:{items:[I('🍝','Noodle sheets','Лапша','Кеспе'),I('🥩','Boiled beef','Отварное мясо','Қайнатылған ет'),I('🧅','Onion','Лук','Пияз'),I('🍵','Broth','Бульон','Сорпа')],e:'🍲',n:T('Serve','Подача','Ұсыну'),d:T('Serve the traditional way: noodles, meat, onion, broth.','Подайте по традиции: лапша, мясо, лук, бульон.','Дәстүрлі түрде беріңіз: кеспе, ет, пияз, сорпа.')}}],
+ lagman:[{k:'dough'},{k:'prep',c:{items:[{k:'onion',sp:0.5,n:T('Onion','Лук','Пияз')},{k:'tomato',sp:0.65,n:T('Bell pepper','Болгарский перец','Тәттi бұрыш')},{k:'pepperoni',sp:0.82,n:T('Beef strips','Полоски говядины','Сиыр еті жолақтары')}]}},{k:'gauge',c:{pot:'🍜',n:T('Simmer','Томление','Бұқтыру'),d:T('Stop the needle in the green zone when the sauce is just right. 3 checks.','Остановите стрелку в зелёной зоне, когда соус готов. 3 проверки.','Тұздық дайын болғанда тілді жасыл аймақта тоқтатыңыз. 3 тексеру.')}}],
+ manti:[{k:'dough'},{k:'memory',c:{set:[I('🥩','Lamb','Баранина','Қой еті'),I('🎃','Pumpkin','Тыква','Асқабақ'),I('🧅','Onion','Лук','Пияз'),I('🧂','Spices','Специи','Дәмдеуіш'),I('💧','Broth','Бульон','Сорпа')],decoy:DEC1}},{k:'gauge',c:{pot:'♨️',n:T('Steam the manti','Пар для манты','Мәнтіні буға пісіру'),d:T('Stop the needle in the green zone when the manti are done. 3 checks.','Остановите стрелку в зелёной зоне, когда манты готовы. 3 проверки.','Мәнті піскенде тілді жасыл аймақта тоқтатыңыз. 3 тексеру.')}}],
+ tiramisu:[{k:'stack',c:{items:[I('☕','Espresso','Эспрессо','Эспрессо'),I('🍪','Sponge','Бисквит','Бисквит'),I('🥛','Mascarpone cream','Крем маскарпоне','Маскарпоне кремі'),I('🍫','Cocoa','Какао','Какао')],e:'🍰',n:T('Layer the tiramisu','Слои тирамису','Тирамису қабаттары'),d:T('Layer it: espresso, sponge, mascarpone cream, cocoa on top.','Выложите слои: эспрессо, бисквит, крем маскарпоне, сверху какао.','Қабаттаңыз: эспрессо, бисквит, маскарпоне кремі, үстіне какао.')}},{k:'pairs',c:{set:['☕','🍫','🥛','🍪','🍓','🥄']}},{k:'memory',c:{set:[I('🧀','Mascarpone','Маскарпоне','Маскарпоне'),I('☕','Espresso','Эспрессо','Эспрессо'),I('🍪','Sponge','Бисквит','Бисквит'),I('🍫','Cocoa','Какао','Какао'),I('🥚','Eggs','Яйца','Жұмыртқа')],decoy:DEC2}}],
+ lemonade:[{k:'memory',c:{set:[LEMON,MINT,GINGER,ICE,SUGAR],decoy:DEC1}},{k:'stack',c:{items:[LEMON,MINT,GINGER,ICE,I('💧','Sparkling water','Газировка','Газдалған су')],e:'🍋',n:T('Mix the lemonade','Смешайте лимонад','Лимонад жасаңыз'),d:T('Add in order: lemon, mint, ginger, ice, sparkling water.','Добавляйте по порядку: лимон, мята, имбирь, лёд, газированная вода.','Ретімен қосыңыз: лимон, жалбыз, зімбір, мұз, газдалған су.')}},{k:'tap',c:{pot:'🥤',n:T('Shake it','Встряхните','Шайқаңыз'),d:T('Tap fast to shake the lemonade before the time runs out!','Нажимайте быстро, чтобы взболтать лимонад, пока не вышло время!','Уақыт бітпей тұрып лимонадты шайқау үшін тез басыңыз!')}}],
+ tea:[{k:'gauge',c:{pot:'🍵',e:'🫖',n:T('Steep the tea','Заварка чая','Шай демдеу'),d:T('Stop the needle in the green zone when the tea is perfectly strong. 3 checks.','Остановите стрелку в зелёной зоне, когда чай заварился идеально. 3 проверки.','Шай дәл қоюланғанда тілді жасыл аймақта тоқтатыңыз. 3 тексеру.')}},{k:'pairs',c:{set:['🍵','🥛','🍬','🫖','🍯','🍋']}}]
+};
+const ORDER=['sauce','mozz','beef','pepperoni','onion','basil'];
+const ING_COLOR={sauce:'#b8432f',mozz:'#f2e6c4',beef:'#7a4a2c',pepperoni:'#a8362b',onion:'#b7739e',basil:'#4f8a3f'};
+
+function pointsFor(acc){return acc>60?50+Math.round((acc-60)*2.5):0;}
+function rating(s){return s>=90?'rate_perfect':s>=75?'rate_great':s>=60?'rate_decent':'rate_low';}
+function genOpp(){return Math.round(clamp(72+(Math.random()+Math.random()+Math.random()-1.5)*24,48,97));}
+
+function startGame(cfg){
+  if(G)return;
+  const dish=cfg.dish&&RECIPES[cfg.dish]?cfg.dish:pick(Object.keys(RECIPES));
+  G={dish,rec:RECIPES[dish],mode:cfg.mode,opp:cfg.opp||null,orderId:cfg.orderId!=null?cfg.orderId:null,stage:0,phase:'intro',scores:[],fb:[],paused:false,
+     oppScore:cfg.mode==='duel'?genOpp():0,cleanup:null,final:null};
+  S.modal=null;
+  render();renderGame();
+}
+function stopStage(){if(G&&G.cleanup){const c=G.cleanup;G.cleanup=null;c();}}
+function closeGame(abort){
+  if(!G)return;
+  stopStage();
+  const g=G;
+  if(abort&&!g.final){
+    if(g.orderId!=null)startPipeline(g.orderId);
+    toast(t('tQuit'));
+  }
+  G=null;
+  renderGame();render();
+}
+function finalizeGame(){
+  if(!G||G.final)return;
+  const acc=Math.round(G.scores.reduce((a,b)=>a+b,0)/G.scores.length);
+  const base=pointsFor(acc);
+  let outcome=null,pts=base,mult=1;
+  if(G.mode==='duel'){
+    outcome=acc>G.oppScore?'win':acc===G.oppScore?'draw':'lose';
+    if(outcome==='win'){mult=2;pts=base*2;}
+    else if(outcome==='lose')pts=0;
+  }
+  G.final={acc,base,pts,mult,outcome};
+  S.points+=pts;save();
+  if(G.orderId!=null)startPipeline(G.orderId);
+}
+function renderGame(){
+  const root=$('#game-root');
+  if(!G){root.classList.remove('open');root.innerHTML='';return;}
+  stopStage();
+  root.classList.add('open');
+  const cur0=G.rec[G.stage],si=sinfo(cur0),key=cur0.k;
+  const dots=G.rec.map((_,i)=>{
+    const done=i<G.stage||(i===G.stage&&(G.phase==='result'||G.phase==='final'))||G.phase==='final';
+    const cur=!done&&i===G.stage;
+    return `<li class="${done?'done':cur?'cur':''}"></li>`;
+  }).join('');
+  const title=G.phase==='final'?t('resTitle'):si.title;
+  const dm=MENU_BY_ID[G.dish],sub=(G.mode==='duel'?t('gameDuel',{name:gname(G.opp)}):t('gameSingle'))+' · '+dm.emoji+' '+dm.n[li()];
+  let body='';
+  if(G.phase==='intro'){
+    body=`<div class="g-card center"><p class="lbl">${t('stageOf',{i:G.stage+1,n:G.rec.length})}</p><div class="g-emoji" aria-hidden="true">${si.e}</div><h3>${si.title}</h3><p class="g-desc">${si.intro}</p><button class="btn btn-primary btn-lg" data-action="gStart" data-af="1">${t('start')}</button></div>`;
+  }else if(G.phase==='play'){
+    body=`<div class="g-card"><div id="stage-area"></div></div>`;
+  }else if(G.phase==='result'){
+    const s=G.scores[G.stage],fb=G.fb[G.stage],last=G.stage===G.rec.length-1;
+    body=`<div class="g-card center"><p class="lbl">${si.title}</p><div class="score">${s}%</div><div class="rating">${t(rating(s))}</div><p class="g-desc">${t(fb.k,fb.p)}</p><button class="btn btn-primary btn-lg" data-action="gNext" data-af="1">${last?t('seeResults'):t('nextStage')}</button></div>`;
+  }else{
+    const f=G.final;
+    const rows=G.rec.map((s0,i)=>`<div class="sumrow"><span>${sinfo(s0).title}</span><div class="bar"><i style="width:${G.scores[i]}%"></i></div><b>${G.scores[i]}%</b></div>`).join('');
+    let lines=`<p class="g-desc">${t('passLine')} — <b>${f.acc>60?t('passed'):t('failed')}</b></p>`;
+    if(G.mode==='duel'){
+      lines=`<p class="rating">${f.outcome==='win'?t('duelWin'):f.outcome==='draw'?t('duelDraw'):t('duelLose',{name:gname(G.opp)})}</p><p>${t('youVs',{a:f.acc,name:esc(gname(G.opp)),b:G.oppScore})}</p>`+lines;
+      if(f.outcome==='win')lines+=`<p class="tag ok">${t('doubleBonus')}</p>`;
+      if(f.outcome!=='win')lines+=`<p class="hint">${t('duelNoPts')}</p>`;
+    }
+    lines+=f.pts>0?`<p class="rating">${t('ptsEarned',{p:f.pts})}</p>`:(G.mode==='duel'&&f.outcome==='lose'?'':`<p class="hint">${t('noPts')}</p>`);
+    body=`<div class="g-card center"><p class="lbl">${t('accuracy')}</p><div class="score">${f.acc}%</div><div class="sumrows">${rows}</div>${lines}<button class="btn btn-primary btn-lg" data-action="gBack" data-af="1">${t('backToRestaurant')}</button></div>`;
+  }
+  root.innerHTML=`<div class="g-wrap"><div class="g-head"><div class="g-title"><small>${esc(sub)}</small><h2>${title}</h2></div><ol class="g-steps" aria-hidden="true">${dots}</ol><button class="btn btn-quiet" data-action="quitAsk">${G.phase==='final'?t('close'):t('quit')}</button></div>${body}</div>
+   <div class="quit" id="quit-layer" hidden><div class="dlg" role="alertdialog" aria-labelledby="q-t"><h2 id="q-t">${t('quitTitle')}</h2><p>${G.mode==='duel'?t('quitTextDuel'):t('quitTextSingle')}</p><div class="acts"><button class="btn btn-primary" data-action="quitKeep">${t('keepCooking')}</button><button class="btn" data-action="quitYes">${t('quitYes')}</button></div></div></div>`;
+  root.scrollTop=0;
+  if(G.paused){const q=$('#quit-layer');if(q)q.hidden=false;}
+  if(G.phase==='play')mountStage();
+  const g0=G;
+  setTimeout(()=>{if(G!==g0||G.paused)return;const b=root.querySelector('[data-af]');if(b)b.focus({preventScroll:true});},350);
+}
+
+function loop(fn){
+  let id=0,alive=true,last=performance.now();
+  function f(now){
+    if(!alive)return;
+    let dt=Math.min(0.05,(now-last)/1000);last=now;
+    if(G&&G.paused)dt=0;
+    fn(dt);
+    id=requestAnimationFrame(f);
+  }
+  id=requestAnimationFrame(f);
+  return ()=>{alive=false;cancelAnimationFrame(id);};
+}
+function lerpColor(stops,v){
+  for(let i=1;i<stops.length;i++){
+    if(v<=stops[i][0]){
+      const a=stops[i-1],b=stops[i],k=(v-a[0])/((b[0]-a[0])||1);
+      return 'rgb('+a[1].map((c,j)=>Math.round(c+(b[1][j]-c)*k)).join(',')+')';
+    }
+  }
+  return 'rgb('+stops[stops.length-1][1].join(',')+')';
+}
+function mountStage(){
+  const area=$('#stage-area'),g=G,cleanups=[];
+  let finished=false;
+  const ctx={area,cleanups,cfg:(g.rec[g.stage].c||{}),
+    finish(score,fb){
+      if(finished)return;finished=true;
+      setTimeout(()=>{
+        if(G!==g||g.phase!=='play')return;
+        stopStage();
+        g.scores.push(clamp(Math.round(score),0,100));g.fb.push(fb);g.phase='result';
+        renderGame();
+      },650);
+    }};
+  g.cleanup=()=>{cleanups.forEach(f=>{try{f();}catch(e){}});};
+  ({dough:mountDough,prep:mountPrep,grill:mountGrill,assembly:mountAssembly,oven:mountOven,stack:mountStack,memory:mountMemory,pairs:mountPairs,seq:mountSeq,gauge:mountGauge,tap:mountTap})[g.rec[g.stage].k](ctx);
+}
+
+/* ---- generic mini-games ---- */
+function mountStack(ctx){
+  const area=ctx.area,items=ctx.cfg.items,N=items.length;
+  let pos=0,miss=0,lock=false;
+  area.innerHTML=`<div class="hud"><div><span class="lbl" id="sk-l"></span></div><div><span class="lbl">${t('gMiss')}</span> <b id="sk-m">0</b></div></div><div class="stackbox" id="sk-box"></div><div class="tiles">${shuffle(items.map((_,i)=>i)).map(i=>`<button class="tile" data-i="${i}"><span style="font-size:24px">${items[i].e}</span>${esc(items[i].n[li()])}</button>`).join('')}</div>`;
+  const box=$('#sk-box',area);
+  function upd(){$('#sk-l',area).textContent=t('layerN',{i:Math.min(pos+1,N),n:N});$('#sk-m',area).textContent=miss;}
+  upd();
+  area.addEventListener('click',e=>{
+    const b=e.target.closest('.tile');
+    if(!b||b.disabled||lock||G.paused)return;
+    const i=+b.dataset.i;
+    if(i===pos){
+      b.disabled=true;
+      box.insertAdjacentHTML('beforeend',`<div>${items[i].e} <small>${esc(items[i].n[li()])}</small></div>`);
+      pos++;upd();
+      if(pos>=N){lock=true;ctx.finish(100*N/(N+miss),{k:'fb_stack',p:{m:miss}});}
+    }else{
+      miss++;upd();b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),320);
+    }
+  });
+}
+function mountMemory(ctx){
+  const area=ctx.area,set=ctx.cfg.set,N=set.length,all=shuffle(set.concat(ctx.cfg.decoy||[]));
+  const sel=new Set(),DUR=4+N*0.6;
+  let el=0,picking=false,fin=false;
+  area.innerHTML=`<p class="rating" id="mm-h">${t('gMemo')}</p><div class="bar"><i id="mm-b" style="width:100%"></i></div><div class="memgrid" id="mm-g"></div><div class="actrow" id="mm-a"></div>`;
+  const g=$('#mm-g',area);
+  g.innerHTML=set.map(x=>`<div class="mcard"><span>${x.e}</span><small>${esc(x.n[li()])}</small></div>`).join('');
+  const stop=loop(dt=>{
+    if(picking)return;
+    el+=dt;$('#mm-b',area).style.width=Math.max(0,100*(1-el/DUR))+'%';
+    if(el>=DUR)startPick();
+  });
+  ctx.cleanups.push(stop);
+  function head(){$('#mm-h',area).textContent=t('gPick',{c:sel.size,n:N});}
+  function startPick(){
+    picking=true;stop();
+    $('#mm-b',area).parentNode.hidden=true;
+    g.innerHTML=all.map((x,i)=>`<button class="mcard pick" data-i="${i}" aria-pressed="false"><span>${x.e}</span><small>${esc(x.n[li()])}</small></button>`).join('');
+    $('#mm-a',area).innerHTML=`<button class="btn btn-primary btn-lg" id="mm-d">${t('gDone')}</button>`;
+    head();
+  }
+  area.addEventListener('click',e=>{
+    if(!picking||fin)return;
+    const b=e.target.closest('.pick');
+    if(b){
+      const i=+b.dataset.i;
+      if(sel.has(i)){sel.delete(i);b.setAttribute('aria-pressed','false');}else{sel.add(i);b.setAttribute('aria-pressed','true');}
+      head();return;
+    }
+    if(e.target.closest('#mm-d')){
+      fin=true;
+      let c=0,w=0;sel.forEach(i=>{if(set.indexOf(all[i])>=0)c++;else w++;});
+      ctx.finish(clamp(100*(c-w*0.5)/N,0,100),{k:'fb_memory',p:{c,n:N}});
+    }
+  });
+}
+function mountPairs(ctx){
+  const area=ctx.area,es=ctx.cfg.set,P=es.length,deck=shuffle(es.concat(es));
+  let first=-1,lock=false,moves=0,found=0;
+  area.innerHTML=`<div class="hud"><div><span class="lbl">${t('gMoves')}</span> <b id="pr-m">0</b></div><div><span class="lbl">${t('gFound')}</span> <b id="pr-f">0/${P}</b></div></div><div class="pgrid">${deck.map((e,i)=>`<button class="pcard" data-i="${i}"><span>?</span></button>`).join('')}</div>`;
+  area.addEventListener('click',ev=>{
+    const b=ev.target.closest('.pcard');
+    if(!b||lock||G.paused||b.classList.contains('up')||b.classList.contains('ok'))return;
+    const i=+b.dataset.i;
+    b.classList.add('up');b.firstChild.textContent=deck[i];
+    if(first<0){first=i;return;}
+    const a=first;first=-1;moves++;
+    $('#pr-m',area).textContent=moves;
+    const A=area.querySelector('.pcard[data-i="'+a+'"]');
+    if(deck[a]===deck[i]){
+      A.classList.add('ok');b.classList.add('ok');found++;
+      $('#pr-f',area).textContent=found+'/'+P;
+      if(found>=P)ctx.finish(clamp(100-(moves-P)*7,20,100),{k:'fb_pairs',p:{m:moves}});
+    }else{
+      lock=true;
+      setTimeout(()=>{[A,b].forEach(x=>{x.classList.remove('up');x.firstChild.textContent='?';});lock=false;},750);
+    }
+  });
+}
+function mountSeq(ctx){
+  const area=ctx.area,pads=ctx.cfg.pads||['🧂','🌶️','🧄','🌿'],cols=['#b8432f','#b8861f','#4d7f55','#1d5c68'],R=3;
+  let round=0,seq=[],pos=0,ok=0,tot=0,accept=false,dead=false;
+  area.innerHTML=`<div class="hud"><div><span class="lbl" id="sq-r"></span></div></div><p class="rating" id="sq-s" style="min-height:30px"></p><div class="sqgrid">${pads.map((p,i)=>`<button class="sqpad" data-i="${i}" style="--c:${cols[i]}">${p}</button>`).join('')}</div>`;
+  ctx.cleanups.push(()=>{dead=true;});
+  const flash=(i,ms)=>{const e=area.querySelector('.sqpad[data-i="'+i+'"]');if(!e)return;e.classList.add('lit');setTimeout(()=>e.classList.remove('lit'),ms);};
+  function next(){
+    if(dead)return;
+    if(round>=R){ctx.finish(tot?100*ok/tot:0,{k:'fb_seq',p:{c:ok,n:tot}});return;}
+    round++;seq=[];
+    for(let i=0;i<round+2;i++)seq.push(rint(0,3));
+    pos=0;accept=false;tot+=seq.length;
+    $('#sq-r',area).textContent=t('gRound',{i:round,n:R});
+    $('#sq-s',area).textContent=t('gSeqWatch');
+    seq.forEach((v,k)=>setTimeout(()=>{if(!dead)flash(v,450);},800+k*750));
+    setTimeout(()=>{if(dead)return;accept=true;$('#sq-s',area).textContent=t('gSeqGo');},800+seq.length*750);
+  }
+  area.addEventListener('click',e=>{
+    const b=e.target.closest('.sqpad');
+    if(!b||!accept||G.paused)return;
+    const i=+b.dataset.i;flash(i,200);
+    if(i===seq[pos]){ok++;pos++;if(pos>=seq.length){accept=false;setTimeout(next,700);}}
+    else{accept=false;$('#sq-s',area).textContent='✗';setTimeout(next,900);}
+  });
+  next();
+}
+function mountGauge(ctx){
+  const area=ctx.area,c=ctx.cfg,R=3,scores=[];
+  let r=0,p=0,dir=1,z=0.5,sp=0.6,busy=true;
+  area.innerHTML=`<div class="hud"><div><span class="lbl" id="ga-r"></span></div></div><div class="g-emoji center" style="margin:8px 0">${c.pot||'🍳'}</div><div class="gauge"><div class="zone" id="ga-z"></div><div class="needle" id="ga-n"></div></div><p class="hint" style="margin-top:8px">${t('greenZone')}</p><p id="ga-f" style="min-height:24px;font-weight:700"></p><div class="actrow"><button class="btn btn-primary btn-lg" id="ga-b">${t('gStop')}</button></div>`;
+  const zone=$('#ga-z',area),nd=$('#ga-n',area);
+  function setup(){
+    r++;p=0;dir=1;sp=0.5+r*0.2;z=rnd(0.25,0.75);
+    zone.style.left=((z-0.09)*100)+'%';zone.style.width='18%';
+    $('#ga-r',area).textContent=t('gRound',{i:r,n:R});$('#ga-f',area).textContent='';busy=false;
+  }
+  setup();
+  ctx.cleanups.push(loop(dt=>{
+    if(busy)return;
+    p+=dir*sp*dt;
+    if(p>=1){p=1;dir=-1;}
+    if(p<=0){p=0;dir=1;}
+    nd.style.left=(p*100)+'%';
+  }));
+  $('#ga-b',area).addEventListener('click',()=>{
+    if(busy||G.paused)return;
+    busy=true;
+    const s=Math.round(clamp(100-Math.abs(p-z)*420,0,100));
+    scores.push(s);$('#ga-f',area).textContent=s+'%';
+    if(r>=R){const avg=Math.round(scores.reduce((a,b)=>a+b,0)/R);ctx.finish(avg,{k:'fb_gauge',p:{a:avg}});}
+    else setTimeout(setup,800);
+  });
+}
+function mountTap(ctx){
+  const area=ctx.area,c=ctx.cfg,GOAL=c.goal||28,DUR=7;
+  let n=0,tl=DUR,started=false,over=false;
+  area.innerHTML=`<div class="hud"><div><span class="lbl">${t('gTaps')}</span> <b id="tp-n">0</b>/${GOAL}</div><div><span class="lbl">${t('gTime')}</span> <b id="tp-t">${DUR}</b></div></div><div class="bar"><i id="tp-b"></i></div><button class="tapbtn" id="tp-x">${c.pot||'🥤'}<small>${t('gTapGo')}</small></button>`;
+  function end(){if(over)return;over=true;ctx.finish(clamp(100*n/GOAL,0,100),{k:'fb_tap',p:{n}});}
+  ctx.cleanups.push(loop(dt=>{
+    if(!started||over)return;
+    tl-=dt;$('#tp-t',area).textContent=Math.max(0,Math.ceil(tl));
+    if(tl<=0)end();
+  }));
+  $('#tp-x',area).addEventListener('pointerdown',e=>{
+    e.preventDefault();
+    if(over||G.paused)return;
+    started=true;n++;
+    $('#tp-n',area).textContent=n;$('#tp-b',area).style.width=Math.min(100,100*n/GOAL)+'%';
+    if(n>=GOAL)end();
+  });
+}
+
+/* ---- stage 1: dough ---- */
+function mountDough(ctx){
+  const area=ctx.area;
+  area.innerHTML=`<div class="hud"><div><span class="lbl">${t('diameter')}</span> <b id="dg-d">11.0</b> ${t('cm')}</div><div><span class="lbl">${t('target')}</span> <b>30</b> ${t('cm')}</div></div>
+   <svg id="dg-svg" class="stage-svg" viewBox="0 0 400 400" role="img" aria-label="${esc(t('st_dough'))}">
+    <defs><radialGradient id="doughG" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#f8eed6"/><stop offset="1" stop-color="#e2cd9b"/></radialGradient></defs>
+    <rect x="2" y="2" width="396" height="396" rx="22" style="fill:var(--wood)"/>
+    <g stroke="rgba(0,0,0,.08)" stroke-width="2" fill="none"><path d="M10 70 H390"/><path d="M10 150 H390"/><path d="M10 250 H390"/><path d="M10 330 H390"/></g>
+    <circle cx="200" cy="200" r="120" fill="none" stroke="#fffaf0" stroke-width="3" stroke-dasharray="9 8"/>
+    <ellipse id="dg-dough" cx="200" cy="200" rx="44" ry="44" fill="url(#doughG)" stroke="#c9b27c" stroke-width="3"/>
+   </svg>
+   <div class="meter"><span class="lbl" id="dg-ph">${t('kneadMeter')}</span><div class="bar"><i id="dg-bar"></i></div></div>
+   <p class="hint" id="dg-hint" style="margin-top:8px">${t('hintKnead')}</p>`;
+  const svg=$('#dg-svg',area),dough=$('#dg-dough',area),bar=$('#dg-bar',area),dEl=$('#dg-d',area),hint=$('#dg-hint',area),ph=$('#dg-ph',area);
+  const C=200;
+  let phase='knead',prog=0,r=44,wob=0,drag=false,last=null,over=false,alive=true;
+  ctx.cleanups.push(()=>{alive=false;});
+  function pt(e){const b=svg.getBoundingClientRect();return {x:(e.clientX-b.left)*400/b.width,y:(e.clientY-b.top)*400/b.height};}
+  function draw(){dough.setAttribute('rx',(r+wob).toFixed(1));dough.setAttribute('ry',(r-wob*0.8).toFixed(1));dEl.textContent=(2*r/8).toFixed(1);}
+  draw();
+  svg.addEventListener('pointerdown',e=>{
+    if(over||G.paused)return;
+    e.preventDefault();
+    try{svg.setPointerCapture(e.pointerId);}catch(x){}
+    drag=true;last=pt(e);
+    if(phase==='stretch'){r=clamp(Math.hypot(last.x-C,last.y-C),44,190);draw();}
+  });
+  svg.addEventListener('pointermove',e=>{
+    if(!drag||over||G.paused)return;
+    const p=pt(e);
+    if(phase==='knead'){
+      if(Math.hypot(p.x-C,p.y-C)<r+30){
+        prog=Math.min(100,prog+Math.hypot(p.x-last.x,p.y-last.y)*0.07);
+        wob=clamp((p.x-C)/200*9,-9,9);
+      }
+      last=p;bar.style.width=prog+'%';draw();
+      if(prog>=100){phase='stretch';drag=false;wob=0;ph.textContent=t('stretchMeter');hint.textContent=t('hintStretch');bar.style.width='100%';draw();}
+    }else if(phase==='stretch'){
+      r=clamp(Math.hypot(p.x-C,p.y-C),44,190);wob=0;draw();
+    }
+  });
+  function up(){
+    if(!drag)return;drag=false;
+    if(phase!=='stretch'||over)return;
+    over=true;
+    const from=r,to=r*0.96,t0=performance.now();
+    (function step(now){
+      if(!alive)return;
+      const k=clamp((now-t0)/260,0,1);
+      r=from+(to-from)*k;draw();
+      if(k<1)requestAnimationFrame(step);
+      else{
+        const d=2*r/8;
+        ctx.finish(Math.max(0,100-Math.abs(d-30)*9),{k:'fb_dough',p:{d:d.toFixed(1)}});
+      }
+    })(t0);
+  }
+  svg.addEventListener('pointerup',up);
+  svg.addEventListener('pointercancel',up);
+}
+
+/* ---- stage 2: prep & slicing ---- */
+function mountPrep(ctx){
+  const area=ctx.area;
+  const items=ctx.cfg.items||[{k:'tomato',sp:0.5},{k:'onion',sp:0.65},{k:'pepperoni',sp:0.82}];
+  const GX=[130,200,270];
+  const shapes={
+    tomato:'<ellipse cx="200" cy="130" rx="140" ry="78" fill="#bf3a2c"/><ellipse cx="160" cy="100" rx="62" ry="20" fill="#fff" opacity=".16"/><circle cx="150" cy="140" r="5" fill="#f0d98a"/><circle cx="215" cy="150" r="5" fill="#f0d98a"/><circle cx="250" cy="115" r="5" fill="#f0d98a"/>',
+    onion:'<ellipse cx="200" cy="130" rx="140" ry="76" fill="#b7739e"/><ellipse cx="200" cy="130" rx="118" ry="60" fill="#dcb9cf"/><ellipse cx="200" cy="130" rx="92" ry="44" fill="#b7739e"/><ellipse cx="200" cy="130" rx="66" ry="28" fill="#dcb9cf"/>',
+    pepperoni:'<rect x="60" y="92" width="280" height="76" rx="34" fill="#9e3328"/><g fill="#c9594a"><circle cx="110" cy="115" r="5"/><circle cx="160" cy="145" r="6"/><circle cx="215" cy="112" r="5"/><circle cx="262" cy="143" r="6"/><circle cx="305" cy="118" r="5"/></g>'
+  };
+  area.innerHTML=`<div class="hud"><div><span class="lbl" id="pp-item"></span></div><div><span class="lbl">${t('cutN')}</span> <b id="pp-cut">1/3</b></div></div>
+   <svg id="pp-svg" class="stage-svg" viewBox="0 0 400 240" role="img" aria-label="${esc(t('st_prep'))}">
+    <rect x="2" y="2" width="396" height="236" rx="20" style="fill:var(--wood)"/>
+    <g id="pp-shape"></g><g id="pp-guides"></g><g id="pp-cuts"></g>
+    <g id="pp-bl"><rect x="-3" y="44" width="6" height="170" rx="3" fill="#dfe3e6" stroke="#8d9397"/><rect x="-10" y="8" width="20" height="40" rx="6" fill="#4a3426"/></g>
+   </svg>
+   <p class="hint" style="margin-top:8px">${t('hintSlice')}</p>
+   <p id="pp-last" style="min-height:24px;font-weight:700"></p>
+   <div class="actrow"><button class="btn btn-primary btn-lg" id="pp-btn">${t('slice')}</button></div>`;
+  const svg=$('#pp-svg',area),btn=$('#pp-btn',area),bl=$('#pp-bl',area),shape=$('#pp-shape',area),guides=$('#pp-guides',area),cuts=$('#pp-cuts',area);
+  let ii=0,ci=0,ph=0,bx=40,busy=false,over=false,lastAct=0;
+  const all=[];
+  function setItem(){
+    shape.innerHTML=shapes[items[ii].k];cuts.innerHTML='';
+    $('#pp-item',area).textContent=items[ii].n?items[ii].n[li()]:t('pi_'+items[ii].k);
+    drawGuides();$('#pp-cut',area).textContent=(ci+1)+'/3';
+  }
+  function drawGuides(){
+    let h='';
+    for(let j=0;j<3;j++){
+      if(j<ci)continue;
+      h+=j===ci?`<line x1="${GX[j]}" x2="${GX[j]}" y1="40" y2="206" stroke="#fffaf0" stroke-width="4"/>`:`<line x1="${GX[j]}" x2="${GX[j]}" y1="40" y2="206" stroke="#fffaf0" stroke-width="2" stroke-dasharray="6 7" opacity=".6"/>`;
+    }
+    guides.innerHTML=h;
+  }
+  function act(){
+    if(over||busy||G.paused)return;
+    const now=performance.now();if(now-lastAct<120)return;lastAct=now;
+    const err=Math.abs(bx-GX[ci]),s=Math.max(0,Math.round(100-err*1.7));
+    all.push(s);
+    cuts.insertAdjacentHTML('beforeend',`<line x1="${bx.toFixed(1)}" x2="${bx.toFixed(1)}" y1="56" y2="206" stroke="#17262b" stroke-width="3" stroke-linecap="round"/>`);
+    $('#pp-last',area).textContent=t('cutFb',{p:s});
+    ci++;
+    if(ci>=3){
+      if(ii>=items.length-1){
+        over=true;
+        const avg=Math.round(all.reduce((a,b)=>a+b,0)/all.length);
+        guides.innerHTML='';
+        ctx.finish(avg,{k:'fb_prep',p:{p:avg}});
+      }else{
+        busy=true;guides.innerHTML='';
+        setTimeout(()=>{if(over)return;ii++;ci=0;setItem();busy=false;},700);
+      }
+    }else{drawGuides();$('#pp-cut',area).textContent=(ci+1)+'/3';}
+  }
+  setItem();
+  ctx.cleanups.push(loop(dt=>{
+    ph+=dt*items[ii].sp;
+    bx=40+320*Math.abs((ph%1)*2-1);
+    bl.setAttribute('transform','translate('+bx.toFixed(1)+' 0)');
+  }));
+  svg.addEventListener('pointerdown',e=>{e.preventDefault();act();});
+  btn.addEventListener('click',act);
+  const kd=e=>{if(e.code==='Space'&&!(e.target&&e.target.tagName==='BUTTON')){e.preventDefault();act();}};
+  document.addEventListener('keydown',kd);
+  ctx.cleanups.push(()=>{over=true;document.removeEventListener('keydown',kd);});
+  btn.focus({preventScroll:true});
+}
+
+/* ---- stage 3: grill ---- */
+function mountGrill(ctx){
+  const area=ctx.area;
+  const SEAR=[[0,[224,140,140]],[35,[180,100,82]],[65,[122,74,44]],[85,[70,44,28]],[100,[24,20,18]]];
+  area.innerHTML=`<div class="hud"><div><b id="gr-side">${t('side1')}</b></div><div><span class="lbl">${t('searLevel')}</span> <b id="gr-val">0%</b></div></div>
+   <svg id="gr-svg" class="stage-svg" viewBox="0 0 400 240" role="img" aria-label="${esc(t('st_grill'))}">
+    <rect x="2" y="2" width="396" height="236" rx="20" fill="#2d3033"/>
+    <g stroke="#53585c" stroke-width="7" stroke-linecap="round"><path d="M20 40 H380"/><path d="M20 80 H380"/><path d="M20 120 H380"/><path d="M20 160 H380"/><path d="M20 200 H380"/></g>
+    <g id="gr-steak"><path id="gr-body" d="M100 120 C100 66 190 50 255 66 C318 82 330 150 286 182 C244 214 148 208 114 172 C100 156 100 136 100 120Z" fill="rgb(224,140,140)" stroke="#e9d7c0" stroke-width="5"/>
+     <g id="gr-marks" stroke="rgba(25,15,10,.7)" stroke-width="7" stroke-linecap="round" opacity="0"><path d="M150 82 L196 188"/><path d="M200 74 L246 196"/><path d="M250 76 L292 170"/></g></g>
+    <g id="gr-smoke" fill="none" stroke="#c5c9cc" stroke-width="5" stroke-linecap="round" opacity="0"><path d="M170 50 C150 30 190 20 168 4"/><path d="M220 46 C200 26 240 16 218 0"/><path d="M270 52 C250 32 290 22 268 6"/></g>
+   </svg>
+   <div class="gauge" aria-hidden="true"><div class="zone" style="left:57%;width:16%"></div><div class="needle" id="gr-needle" style="left:0%"></div></div>
+   <div class="gmeta"><span class="hint">${t('greenZone')}</span></div>
+   <div class="actrow"><button class="btn btn-primary btn-lg" id="gr-btn">${t('flip')}</button></div>`;
+  const steak=$('#gr-steak',area),body=$('#gr-body',area),marks=$('#gr-marks',area),smoke=$('#gr-smoke',area),needle=$('#gr-needle',area),val=$('#gr-val',area),sideEl=$('#gr-side',area),btn=$('#gr-btn',area);
+  let side=1,lvl=0,over=false;const lv=[0,0],sc=[0,0],rate=[11,14];
+  function paint(){
+    body.setAttribute('fill',lerpColor(SEAR,lvl));
+    marks.setAttribute('opacity',clamp((lvl-20)/30,0,1).toFixed(2));
+    smoke.setAttribute('opacity',clamp((lvl-80)/20,0,1).toFixed(2));
+    needle.style.left=lvl.toFixed(1)+'%';val.textContent=Math.round(lvl)+'%';
+  }
+  function endSide(burned){
+    lv[side-1]=burned?100:lvl;
+    sc[side-1]=burned?0:Math.max(0,Math.round(100-Math.abs(lvl-65)*2.8));
+    if(side===1){
+      side=2;lvl=0;sideEl.textContent=t('side2');btn.textContent=t('takeOff');
+      steak.classList.remove('flip');void steak.getBoundingClientRect();steak.classList.add('flip');
+      paint();
+    }else{
+      over=true;paint();
+      ctx.finish((sc[0]+sc[1])/2,{k:'fb_grill',p:{a:Math.round(lv[0]),b:Math.round(lv[1])}});
+    }
+  }
+  btn.addEventListener('click',()=>{if(over||G.paused)return;endSide(false);});
+  ctx.cleanups.push(loop(dt=>{
+    if(over)return;
+    lvl+=rate[side-1]*dt;
+    if(lvl>=100){lvl=100;paint();endSide(true);return;}
+    paint();
+  }));
+  paint();
+  btn.focus({preventScroll:true});
+}
+
+/* ---- stage 4: assembly ---- */
+function layerSvg(key){
+  const sc=(seed,n,rad)=>{const r=rng(seed),o=[];for(let i=0;i<n;i++){const a=r()*Math.PI*2,d=Math.sqrt(r())*rad;o.push({x:150+Math.cos(a)*d,y:150+Math.sin(a)*d,a:Math.round(r()*360),s:0.75+r()*0.5});}return o;};
+  const tr=p=>`translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${p.a}) scale(${p.s.toFixed(2)})`;
+  if(key==='sauce')return '<circle cx="150" cy="150" r="104" fill="#b8432f" opacity=".96"/>';
+  if(key==='mozz')return sc(11,12,80).map(p=>`<circle transform="${tr(p)}" r="22" fill="#f4ead0" opacity=".93"/>`).join('');
+  if(key==='beef')return sc(23,9,82).map(p=>`<rect transform="${tr(p)}" x="-10" y="-6" width="20" height="12" rx="4" fill="#7a4a2c"/>`).join('');
+  if(key==='pepperoni')return sc(37,7,78).map(p=>`<g transform="${tr(p)}"><circle r="15" fill="#a8362b"/><circle cx="-5" cy="-4" r="2.5" fill="#c9594a"/><circle cx="5" cy="4" r="2.5" fill="#c9594a"/></g>`).join('');
+  if(key==='onion')return sc(41,10,84).map(p=>`<path transform="${tr(p)}" d="M-12 0 A12 12 0 0 1 12 0" stroke="#b7739e" stroke-width="3.5" fill="none" stroke-linecap="round"/>`).join('');
+  return sc(53,5,70).map(p=>`<ellipse transform="${tr(p)}" rx="13" ry="7" fill="#4f8a3f"/>`).join('');
+}
+function mountAssembly(ctx){
+  const area=ctx.area;
+  const tiles=shuffle(ORDER);
+  const placed=[];
+  area.innerHTML=`<div class="hud"><div><b id="as-n"></b></div></div>
+   <div class="asm"><svg id="as-svg" class="stage-svg" viewBox="0 0 300 300" role="img" aria-label="${esc(t('st_assembly'))}" style="max-width:300px">
+    <rect x="2" y="2" width="296" height="296" rx="20" style="fill:var(--wood)"/>
+    <circle cx="150" cy="150" r="128" fill="#e2c88f"/><circle cx="150" cy="150" r="112" fill="#edd9a8"/><g id="as-layers"></g></svg>
+    <div><div class="tiles" id="as-tiles">${tiles.map(k=>`<button class="tile" data-k="${k}"><span class="sg" style="background:${ING_COLOR[k]}"></span>${t('ing_'+k)}<span class="ord" hidden></span></button>`).join('')}</div>
+     <div class="actrow" style="justify-content:flex-start"><button class="btn" id="as-undo">${t('undo')}</button><button class="btn btn-primary" id="as-go" disabled>${t('toOven')}</button></div></div></div>`;
+  const layers=$('#as-layers',area),nEl=$('#as-n',area),undo=$('#as-undo',area),go=$('#as-go',area),box=$('#as-tiles',area);
+  let over=false;
+  function paint(){
+    layers.innerHTML=placed.map(layerSvg).join('');
+    nEl.textContent=t('layerN',{i:Math.min(placed.length+1,ORDER.length),n:ORDER.length});
+    box.querySelectorAll('.tile').forEach(b=>{
+      const idx=placed.indexOf(b.dataset.k),ord=b.querySelector('.ord');
+      b.disabled=idx>=0||over;ord.hidden=idx<0;ord.textContent=idx>=0?String(idx+1):'';
+    });
+    undo.disabled=!placed.length||over;go.disabled=placed.length<ORDER.length||over;
+  }
+  box.addEventListener('click',e=>{
+    const b=e.target.closest('.tile');
+    if(!b||over||G.paused||placed.length>=ORDER.length||placed.indexOf(b.dataset.k)>=0)return;
+    placed.push(b.dataset.k);paint();
+  });
+  undo.addEventListener('click',()=>{if(over||G.paused||!placed.length)return;placed.pop();paint();});
+  go.addEventListener('click',()=>{
+    if(over||G.paused||placed.length<ORDER.length)return;
+    over=true;paint();
+    let c=0;placed.forEach((k,i)=>{if(k===ORDER[i])c++;});
+    ctx.finish(c*100/ORDER.length,{k:'fb_assembly',p:{c,n:ORDER.length}});
+  });
+  ctx.cleanups.push(()=>{over=true;});
+  paint();
+}
+
+/* ---- stage 5: oven ---- */
+function mountOven(ctx){
+  const area=ctx.area;
+  const CRUST=[[0,[236,214,160]],[40,[226,184,112]],[68,[201,141,61]],[85,[130,80,35]],[100,[50,30,18]]];
+  const spots=[[170,226,5],[205,236,4],[232,222,6],[190,214,3],[246,238,4],[158,238,4],[218,246,3]];
+  area.innerHTML=`<div class="hud"><div><span class="lbl">${t('bakeLevel')}</span> <b id="ov-val">0%</b></div></div>
+   <svg id="ov-svg" class="stage-svg" viewBox="0 0 400 290" role="img" aria-label="${esc(t('st_oven'))}">
+    <defs><radialGradient id="glow" cx=".5" cy=".75" r=".7"><stop offset="0" stop-color="#d9873f"/><stop offset=".6" stop-color="#7a3a1b"/><stop offset="1" stop-color="#2a140b"/></radialGradient></defs>
+    <path d="M30 280 V150 C30 60 112 14 200 14 C288 14 370 60 370 150 V280 Z" fill="#9a8c7a"/>
+    <g stroke="rgba(0,0,0,.12)" stroke-width="2" fill="none"><path d="M40 120 H360"/><path d="M34 170 H366"/><path d="M30 220 H370"/><path d="M200 14 V90"/><path d="M120 44 V120"/><path d="M280 44 V120"/></g>
+    <path d="M96 280 V176 C96 124 144 92 200 92 C256 92 304 124 304 176 V280 Z" fill="url(#glow)"/>
+    <g fill="#e8a04a" opacity=".9"><path class="flame" d="M130 230 C118 200 140 188 134 160 C154 180 160 206 148 230Z"/><path class="flame f2" d="M190 236 C176 196 204 182 196 146 C224 172 230 208 214 236Z"/><path class="flame f3" d="M252 232 C240 204 262 190 256 166 C276 186 280 210 268 232Z"/></g>
+    <ellipse cx="200" cy="232" rx="70" ry="27" fill="rgb(236,214,160)" id="ov-pizza" stroke="#6b4e33" stroke-width="2"/>
+    <g id="ov-spots" fill="#2a160b" opacity="0">${spots.map(s=>`<ellipse cx="${s[0]}" cy="${s[1]}" rx="${s[2]}" ry="${s[2]*0.6}"/>`).join('')}</g>
+    <path d="M30 280 H370" stroke="#6f6354" stroke-width="6"/>
+   </svg>
+   <div class="gauge" aria-hidden="true"><div class="zone" style="left:60%;width:16%"></div><div class="needle" id="ov-needle" style="left:0%"></div></div>
+   <div class="gmeta"><span class="hint">${t('ovenHint')}</span></div>
+   <div class="actrow"><button class="btn btn-primary btn-lg" id="ov-btn">${t('pull')}</button></div>`;
+  const pizza=$('#ov-pizza',area),sp=$('#ov-spots',area),needle=$('#ov-needle',area),val=$('#ov-val',area),btn=$('#ov-btn',area);
+  let lvl=0,tt=0,over=false;
+  function paint(){
+    pizza.setAttribute('fill',lerpColor(CRUST,lvl));
+    sp.setAttribute('opacity',clamp((lvl-50)/40,0,0.9).toFixed(2));
+    needle.style.left=lvl.toFixed(1)+'%';val.textContent=Math.round(lvl)+'%';
+  }
+  btn.addEventListener('click',()=>{
+    if(over||G.paused)return;
+    over=true;paint();
+    ctx.finish(Math.max(0,100-Math.abs(lvl-68)*2.6),{k:'fb_oven',p:{a:Math.round(lvl)}});
+  });
+  ctx.cleanups.push(loop(dt=>{
+    if(over)return;
+    tt+=dt;
+    lvl+=9.2*(1+0.28*Math.sin(tt*2.1)+0.12*Math.sin(tt*5.3))*dt;
+    if(lvl>=100){lvl=100;over=true;paint();ctx.finish(0,{k:'fb_ovenBurnt',p:{}});return;}
+    paint();
+  }));
+  paint();
+  btn.focus({preventScroll:true});
+}
+
+/* ============ timers & init ============ */
+function updateQrTimer(){
+  if(!S.modal||S.modal.type!=='checkout'||S.pay.phase!=='idle')return;
+  const left=S.pay.expiresAt-Date.now();
+  if(left<=0){if(!S.pay.expired){S.pay.expired=true;renderModal();}return;}
+  const el=$('#qr-timer');if(el)el.textContent=mmss(left);
+}
+function tick(){
+  try{maybeInvite();lifecycle();expireMsgs();updateQrTimer();}catch(e){console.error(e);}
+}
+function init(){
+  load();
+  initTables();
+  const g=gapRange();
+  S.nextInviteAt=Date.now()+rint(g[0],g[1]);
+  S.nextLifeAt=Date.now()+rint(18000,35000);
+  render();
+  setInterval(tick,1000);
+}
+init();
+})();
+</script>
+</body>
+</html>
